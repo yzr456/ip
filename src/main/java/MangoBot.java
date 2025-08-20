@@ -5,7 +5,7 @@ import java.util.List;
 public class MangoBot {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        List<String> tasks = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
         System.out.println("____________________________________________________________\n" +
                 " Hello! I'm MangoBot\n" +
                 " What can I do for you?\n" +
@@ -27,8 +27,24 @@ public class MangoBot {
                     }
                 }
                 System.out.println("____________________________________________________________");
+            } else if (input.startsWith("mark ")) {
+                int index = Integer.parseInt(input.substring(5)) - 1;
+                Task t = tasks.get(index);
+                t.markAsDone();
+                System.out.println("____________________________________________________________\n" +
+                        "Nice! I've marked this task as done:\n" +
+                        " " + t +
+                        "\n____________________________________________________________");
+            } else if (input.startsWith("unmark ")) {
+                int index = Integer.parseInt(input.substring(7)) - 1;
+                Task t = tasks.get(index);
+                t.markAsNotDone();
+                System.out.println("____________________________________________________________\n" +
+                        "OK, I've marked this task as not done yet:\n" +
+                        " " + t +
+                        "\n____________________________________________________________");
             } else {
-                tasks.add(input);
+                tasks.add(new Task(input));
                 System.out.println("____________________________________________________________\n" +
                         " added: " + input +
                         "\n____________________________________________________________");

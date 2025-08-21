@@ -65,6 +65,17 @@ public class MangoBot {
                 tasks.add(t);
                 System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
                         "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
+            } else if (input.startsWith("delete")) {
+                if (input.length() == 6) throw new MangoException(
+                        "The index of the Task to be deleted must be specified");
+                int index = Integer.parseInt(input.substring(7).trim()) - 1;
+                if (index < 0 || index + 1 > tasks.size()) throw new MangoException(
+                        "The index of the Task to be deleted must be within the list.");
+                Task removed = tasks.remove(index);
+                System.out.println(
+                        LINE + "\n Noted. I've removed this task:\n   " + removed +
+                                "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE
+                );
             } else {
                 throw new MangoException("Invalid input.");
             }

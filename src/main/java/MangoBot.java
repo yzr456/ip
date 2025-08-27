@@ -9,8 +9,8 @@ public class MangoBot {
         Storage storage = new Storage("./data/mango.txt");
         storage.init();
         List<Task> tasks = storage.load();
-        System.out.println(LINE + "\n Hello! I'm MangoBot\n" +
-                " What can I do for you?\n" + LINE);
+        System.out.println(LINE + "\n Hello! I'm MangoBot\n"
+                + " What can I do for you?\n" + LINE);
         Scanner sc = new Scanner(System.in);
         while (true) {
             String input = sc.nextLine();
@@ -45,7 +45,8 @@ public class MangoBot {
                     t.markAsDone();
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n Nice! I've marked this task as done:\n   " + t + "\n" + LINE);
+                    System.out.println(LINE + "\n Nice! I've marked this task as done:\n   "
+                            + t + "\n" + LINE);
                 }
 
                 case UNMARK -> {
@@ -60,7 +61,8 @@ public class MangoBot {
                     t.markAsNotDone();
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n OK, I've marked this task as not done yet:\n   " + t + "\n" + LINE);
+                    System.out.println(LINE + "\n OK, I've marked this task as not done yet:\n   "
+                            + t + "\n" + LINE);
                 }
 
                 case TODO -> {
@@ -71,8 +73,8 @@ public class MangoBot {
                     tasks.add(t);
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
-                            "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
+                    System.out.println(LINE + "\n Got it. I've added this task:\n   "
+                            + t + "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
 
                 }
 
@@ -85,8 +87,8 @@ public class MangoBot {
                     tasks.add(t);
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
-                            "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
+                    System.out.println(LINE + "\n Got it. I've added this task:\n   "
+                            + t + "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
                 }
 
                 case EVENT -> {
@@ -102,8 +104,8 @@ public class MangoBot {
                     tasks.add(t);
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
-                            "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
+                    System.out.println(LINE + "\n Got it. I've added this task:\n   "
+                            + t + "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
                 }
 
                 case DELETE -> {
@@ -118,8 +120,8 @@ public class MangoBot {
                     Task removed = tasks.remove(index - 1);
                     storage.save(tasks);
 
-                    System.out.println(LINE + "\n Noted. I've removed this task:\n   " + removed +
-                            "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
+                    System.out.println(LINE + "\n Noted. I've removed this task:\n   "
+                            + removed + "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
                 }
 
                 case UNKNOWN -> throw new MangoException("Invalid input.");

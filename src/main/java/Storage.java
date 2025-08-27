@@ -22,7 +22,7 @@ public class Storage {
         }
     }
 
-    public List<Task> load() throws IOException, MangoException {
+    public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
         if (!Files.exists(filePath)) {
             return tasks;

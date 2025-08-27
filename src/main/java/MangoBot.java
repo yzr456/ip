@@ -1,16 +1,17 @@
+import java.io.IOException;
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MangoBot {
     private static final String LINE = "____________________________________________________________";
 
-    public static void main(String[] args) throws MangoException {
-        Scanner sc = new Scanner(System.in);
-        List<Task> tasks = new ArrayList<>();
-
+    public static void main(String[] args) throws IOException, MangoException {
+        Storage storage = new Storage("./data/mango.txt");
+        storage.init();
+        List<Task> tasks = storage.load();
         System.out.println(LINE + "\n Hello! I'm MangoBot\n" +
                 " What can I do for you?\n" + LINE);
+        Scanner sc = new Scanner(System.in);
         while (true) {
             String input = sc.nextLine();
             Command cmd = Command.of(input);
@@ -37,11 +38,12 @@ public class MangoBot {
                     if (arg.isEmpty()) throw new MangoException("The index of the Task to mark must be specified");
 
                     int index = Integer.parseInt(arg);
-                    if (index < 0 || index + 1 > tasks.size()) throw new MangoException(
+                    if (index <= 0 || index > tasks.size()) throw new MangoException(
                             "The index of the Task to mark must be within the list.");
 
-                    Task t = tasks.get(index);
+                    Task t = tasks.get(index - 1);
                     t.markAsDone();
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n Nice! I've marked this task as done:\n   " + t + "\n" + LINE);
                 }
@@ -51,10 +53,12 @@ public class MangoBot {
                     if (arg.isEmpty()) throw new MangoException("The index of the Task to unmark must be specified");
 
                     int index = Integer.parseInt(arg);
-                    if (index < 0 || index + 1 > tasks.size()) throw new MangoException(
+                    if (index <= 0 || index > tasks.size()) throw new MangoException(
                             "The index of the Task to unmark must be within the list.");
-                    Task t = tasks.get(index);
+
+                    Task t = tasks.get(index - 1);
                     t.markAsNotDone();
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n OK, I've marked this task as not done yet:\n   " + t + "\n" + LINE);
                 }
@@ -65,6 +69,7 @@ public class MangoBot {
 
                     Task t = new Todo(arg);
                     tasks.add(t);
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
                             "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
@@ -78,6 +83,7 @@ public class MangoBot {
                     String[] parts = cmd.arg(input).split(" /by ", 2);
                     Task t = new Deadline(parts[0].trim(), parts[1].trim());
                     tasks.add(t);
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
                             "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
@@ -94,6 +100,7 @@ public class MangoBot {
                     String to = arg.substring(iTo + 5).trim();
                     Task t = new Event(desc, from, to);
                     tasks.add(t);
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
                             "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);
@@ -105,10 +112,11 @@ public class MangoBot {
                         throw new MangoException("The index of the Task to be removed must be specified");
 
                     int index = Integer.parseInt(arg);
-                    if (index < 0 || index + 1 > tasks.size()) throw new MangoException(
+                    if (index <= 0 || index > tasks.size()) throw new MangoException(
                             "The index of the Task to removed must be within the list.");
 
-                    Task removed = tasks.remove(index);
+                    Task removed = tasks.remove(index - 1);
+                    storage.save(tasks);
 
                     System.out.println(LINE + "\n Noted. I've removed this task:\n   " + removed +
                             "\n Now you have " + tasks.size() + " tasks in the list.\n" + LINE);

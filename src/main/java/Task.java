@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -20,6 +22,27 @@ public abstract class Task {
     }
 
     protected abstract String getTypeIcon();
+
+    public abstract String toFileString();
+
+    public static Task fromFileString(String line) throws MangoException {
+        String[] parts = line.split(" \\| ");
+        String type = parts[0];
+        boolean done = parts[1].equals("1");
+        String desc = parts[2];
+
+        Task t;
+        switch (type) {
+        case "T" -> t = new Todo(desc);
+        case "D" -> t = new Deadline(desc, parts[3]);
+        case "E" -> t = new Event(desc, parts[3], parts[4]);
+        default -> throw new MangoException("Unknown task type");
+        }
+        if (done) {
+            t.markAsDone();
+        }
+        return t;
+    }
 
     @Override
     public String toString() {

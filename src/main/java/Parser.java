@@ -1,0 +1,65 @@
+public class Parser {
+    public final Command cmd;
+    public final String arg;
+
+    public Parser(String input) {
+        this.cmd = Command.of(input);
+        this.arg = this.cmd.arg(input);
+    }
+
+    public Command getCmd() throws MangoException {
+        if (this.cmd == Command.UNKNOWN) {
+            throw new MangoException(MangoException.ERR_INVALID);
+        }
+        return this.cmd;
+    }
+
+    public String getArg() throws MangoException {
+        switch (this.cmd) {
+            case TODO -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_TODO_EMPTY);
+            }
+
+            case DEADLINE -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_DEADLINE_EMPTY);
+                if (!arg.contains(" /by "))
+                    throw new MangoException("Deadline must use format: deadline <desc> /by <time>");
+            }
+
+            case EVENT -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_EVENT_EMPTY);
+                if (!arg.contains(" /from ") || !arg.contains(" /to ")) {
+                    throw new MangoException("Event must use format: event <desc> /from <start> /to <end>");
+                }
+            }
+        }
+        return this.arg;
+    }
+
+    public int parseIndex(int size) throws MangoException {
+        if (this.arg.isEmpty()) {
+            switch (this.cmd) {
+                case MARK -> throw new MangoException(MangoException.ERR_MARK_EMPTY);
+                case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_EMPTY);
+                case DELETE -> throw new MangoException(MangoException.ERR_DELETE_EMPTY);
+                default -> throw new MangoException(MangoException.ERR_INVALID);
+            }
+        }
+
+        int idx;
+        try {
+            idx = Integer.parseInt(this.arg);
+        } catch (NumberFormatException e) {
+            throw new MangoException(MangoException.ERR_NAN);
+        }
+        if (idx <= 0 || idx > size) {
+            switch (this.cmd) {
+            case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);
+            case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_RANGE);
+            case DELETE -> throw new MangoException(MangoException.ERR_DELETE_RANGE);
+            default -> throw new MangoException(MangoException.ERR_INVALID);
+            }
+        }
+        return idx - 1;
+    }
+}

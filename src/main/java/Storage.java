@@ -8,11 +8,12 @@ import java.util.List;
 public class Storage {
     private final Path filePath;
 
-    public Storage(String filePath) {
+    public Storage(String filePath) throws IOException{
         this.filePath = Paths.get(filePath);
+        this.init();
     }
 
-    public void init() throws IOException {
+    private void init() throws IOException {
         Path parent = filePath.getParent();
         if (parent != null) {
             Files.createDirectories(parent);
@@ -27,7 +28,6 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-
         for (String line : Files.readAllLines(filePath)) {
             tasks.add(Task.fromFileString(line));
         }

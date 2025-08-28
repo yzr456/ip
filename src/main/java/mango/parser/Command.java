@@ -1,5 +1,8 @@
 package mango.parser;
 
+/**
+ * Enum representing all valid commands recognized by {@code MangoBot}.
+ */
 public enum Command {
     BYE("bye", false),
     LIST("list", false),
@@ -19,6 +22,12 @@ public enum Command {
         this.needsArg = needsArg;
     }
 
+    /**
+     * Parses input to determine which {@code Command} it represents.
+     *
+     * @param input the raw user input
+     * @return the parsed command, or {@link #UNKNOWN} if none matches
+     */
     public static Command of(String input) {
         for (Command c : values()) {
             if (c.keyword.equals(input) || input.startsWith(c.keyword + " ")) {
@@ -28,6 +37,12 @@ public enum Command {
         return UNKNOWN;
     }
 
+    /**
+     * Extracts argument from input for this command.
+     *
+     * @param input the raw user input
+     * @return the argument string (may be empty if no argument is required)
+     */
     public String arg(String input) {
         if (!needsArg) {
             return "";

@@ -1,5 +1,8 @@
 package mango.exception;
 
+/**
+ * Custom exception class for MangoBot-specific errors.
+ */
 public class MangoException extends Exception {
     public static final String ERR_INVALID = "Invalid input.";
     public static final String ERR_NAN = "Please provide a valid number.";
@@ -17,6 +20,11 @@ public class MangoException extends Exception {
     public static final String ERR_DELETE_EMPTY = "The index of the Task to be removed must be specified";
     public static final String ERR_DELETE_RANGE = "The index of the Task to removed must be within the list.";
 
+    /**
+     * Constructs a {@code MangoException} with the specified error message.
+     *
+     * @param message the error message
+     */
     public MangoException(String message) {
         super(message);
     }

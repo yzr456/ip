@@ -1,3 +1,7 @@
+package mango.parser;
+
+import mango.exception.MangoException;
+
 public class Parser {
     public final Command cmd;
     public final String arg;

@@ -1,4 +1,15 @@
+package mango.core;
+
 import java.io.IOException;
+import mango.io.Storage;
+import mango.ui.Ui;
+import mango.task.Task;
+import mango.task.TaskList;
+import mango.task.Todo;
+import mango.task.Deadline;
+import mango.task.Event;
+import mango.parser.Parser;
+import mango.exception.MangoException;
 
 class MangoBot {
     private final Storage storage;

@@ -1,3 +1,5 @@
+package mango.parser;
+
 public enum Command {
     BYE("bye", false),
     LIST("list", false),

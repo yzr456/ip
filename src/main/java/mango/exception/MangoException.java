@@ -1,3 +1,5 @@
+package mango.exception;
+
 public class MangoException extends Exception {
     public static final String ERR_INVALID = "Invalid input.";
     public static final String ERR_NAN = "Please provide a valid number.";

@@ -1,3 +1,5 @@
+package mango.task;
+
 import java.io.IOException;
 
 public abstract class Task {

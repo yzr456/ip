@@ -3,6 +3,9 @@ package mango.task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * An {@code Event} task with a start and end date/time.
+ */
 public class Event extends Task {
     private final LocalDateTime from;
     private final LocalDateTime to;
@@ -11,6 +14,13 @@ public class Event extends Task {
     private static final DateTimeFormatter OUTPUT_FMT =
             DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
 
+    /**
+     * Constructs an {@code Event}.
+     *
+     * @param description description of the event
+     * @param from start time string in format yyyy-MM-dd HHmm
+     * @param to end time string in format yyyy-MM-dd HHmm
+     */
     public Event(String description, String from, String to) {
         super(description);
         this.from = LocalDateTime.parse(from, INPUT_FMT);
@@ -26,8 +36,8 @@ public class Event extends Task {
                 + from.format(INPUT_FMT) + " | " + to.format(INPUT_FMT);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return super.toString() + " (from: " + from.format(OUTPUT_FMT) + " to: " + to.format(OUTPUT_FMT) + ")";
     }
 }
-

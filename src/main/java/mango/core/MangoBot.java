@@ -24,6 +24,7 @@ class MangoBot {
 
     public void run() {
         ui.showWelcome();
+
         while (true) {
             String input = ui.readCommand();
             Parser p = new Parser(input);

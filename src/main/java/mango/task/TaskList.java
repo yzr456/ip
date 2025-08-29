@@ -89,7 +89,29 @@ public class TaskList {
         return t;
     }
 
+    /**
+     * Retrieves the task at the specified index from the task list.
+     *
+     * @param index the zero-based index of the task to retrieve
+     * @return the {@link Task} at the given index
+     */
     public Task get(int index) {
         return this.tasks.get(index);
+    }
+
+    /**
+     * Finds tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword the search keyword
+     * @return list of matching tasks
+     */
+    public List<Task> find(String keyword) {
+        List<Task> results = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.description.contains(keyword)) {
+                results.add(t);
+            }
+        }
+        return results;
     }
 }

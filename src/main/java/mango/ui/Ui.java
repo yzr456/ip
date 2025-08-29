@@ -61,7 +61,7 @@ public class Ui {
 
     /** Shows the list of tasks. */
     public void showList(List<Task> tasks) {
-        System.out.println(LINE + "\n Here are the tasks in your list:\n" + LINE);
+        System.out.println(LINE + "\n Here are the tasks in your list:");
         if (tasks.isEmpty()) {
             System.out.println("No tasks have been added yet.");
         } else {
@@ -69,5 +69,20 @@ public class Ui {
                 System.out.println(" " + (i + 1) + "." + tasks.get(i));
             }
         }
+        System.out.println(LINE);
     }
+
+    /** Shows the tasks that are found. */
+    public void showFound(List<Task> tasks) {
+        System.out.println(LINE + "\n Here are the matching tasks in your list for:");
+        if (tasks.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(" " + (i + 1) + "." + tasks.get(i));
+            }
+        }
+        System.out.println(LINE);
+    }
+
 }

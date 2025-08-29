@@ -41,19 +41,22 @@ public class Parser {
      */
     public String getArg() throws MangoException {
         switch (this.cmd) {
-        case TODO -> {
-            if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_TODO_EMPTY);
-        }
-        case DEADLINE -> {
-            if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_DEADLINE_EMPTY);
-            if (!arg.contains(" /by ")) throw new MangoException("Deadline must use format: deadline <desc> /by <time>");
-        }
-        case EVENT -> {
-            if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_EVENT_EMPTY);
-            if (!arg.contains(" /from ") || !arg.contains(" /to ")) {
-                throw new MangoException("Event must use format: event <desc> /from <start> /to <end>");
+            case TODO -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_TODO_EMPTY);
             }
-        }
+            case DEADLINE -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_DEADLINE_EMPTY);
+                if (!arg.contains(" /by ")) throw new MangoException("Deadline must use format: deadline <desc> /by <time>");
+            }
+            case EVENT -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_EVENT_EMPTY);
+                if (!arg.contains(" /from ") || !arg.contains(" /to ")) {
+                    throw new MangoException("Event must use format: event <desc> /from <start> /to <end>");
+                }
+            }
+            case FIND -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_FIND_EMPTY);
+            }
         }
         return this.arg;
     }

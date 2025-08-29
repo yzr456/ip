@@ -47,59 +47,64 @@ class MangoBot {
 
             try {
                 switch (p.getCmd()) {
-                case BYE -> {
-                    ui.showBye();
-                    ui.close();
-                    return;
-                }
+                    case BYE -> {
+                        ui.showBye();
+                        ui.close();
+                        return;
+                    }
 
-                case LIST -> ui.showList(taskList.view());
+                    case LIST -> ui.showList(taskList.view());
 
-                case MARK -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task t = taskList.mark(idx);
-                    storage.save(taskList.view());
-                    ui.showMarked(t);
-                }
+                    case MARK -> {
+                        int idx = p.parseIndex(taskList.size());
+                        Task t = taskList.mark(idx);
+                        storage.save(taskList.view());
+                        ui.showMarked(t);
+                    }
 
-                case UNMARK -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task t = taskList.unmark(idx);
-                    storage.save(taskList.view());
-                    ui.showUnmarked(t);
-                }
+                    case UNMARK -> {
+                        int idx = p.parseIndex(taskList.size());
+                        Task t = taskList.unmark(idx);
+                        storage.save(taskList.view());
+                        ui.showUnmarked(t);
+                    }
 
-                case TODO -> {
-                    Task t = taskList.add(new Todo(p.getArg()));
-                    storage.save(taskList.view());
-                    ui.showAdded(t, taskList.size());
-                }
+                    case TODO -> {
+                        Task t = taskList.add(new Todo(p.getArg()));
+                        storage.save(taskList.view());
+                        ui.showAdded(t, taskList.size());
+                    }
 
-                case DEADLINE -> {
-                    String[] parts = p.getArg().split(" /by ", 2);
-                    Task t = taskList.add(new Deadline(parts[0].trim(), parts[1].trim()));
-                    storage.save(taskList.view());
-                    ui.showAdded(t, taskList.size());
-                }
+                    case DEADLINE -> {
+                        String[] parts = p.getArg().split(" /by ", 2);
+                        Task t = taskList.add(new Deadline(parts[0].trim(), parts[1].trim()));
+                        storage.save(taskList.view());
+                        ui.showAdded(t, taskList.size());
+                    }
 
-                case EVENT -> {
-                    String arg = p.getArg();
-                    int iFrom = arg.indexOf(" /from ");
-                    int iTo   = arg.indexOf(" /to ", iFrom + 7);
-                    String desc = arg.substring(0, iFrom).trim();
-                    String from = arg.substring(iFrom + 7, iTo).trim();
-                    String to   = arg.substring(iTo + 5).trim();
-                    Task t = taskList.add(new Event(desc, from, to));
-                    storage.save(taskList.view());
-                    ui.showAdded(t, taskList.size());
-                }
+                    case EVENT -> {
+                        String arg = p.getArg();
+                        int iFrom = arg.indexOf(" /from ");
+                        int iTo   = arg.indexOf(" /to ", iFrom + 7);
+                        String desc = arg.substring(0, iFrom).trim();
+                        String from = arg.substring(iFrom + 7, iTo).trim();
+                        String to   = arg.substring(iTo + 5).trim();
+                        Task t = taskList.add(new Event(desc, from, to));
+                        storage.save(taskList.view());
+                        ui.showAdded(t, taskList.size());
+                    }
 
-                case DELETE -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task removed = taskList.remove(idx);
-                    storage.save(taskList.view());
-                    ui.showRemoved(removed, taskList.size());
-                }
+                    case DELETE -> {
+                        int idx = p.parseIndex(taskList.size());
+                        Task removed = taskList.remove(idx);
+                        storage.save(taskList.view());
+                        ui.showRemoved(removed, taskList.size());
+                    }
+
+                    case FIND -> {
+                        String keyword = p.getArg();
+                        ui.showFound(taskList.find(keyword));
+                    }
                 }
             } catch (MangoException e) {
                 ui.showError(e.getMessage());

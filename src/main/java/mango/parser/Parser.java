@@ -36,6 +36,9 @@ public class Parser {
                     throw new MangoException("Event must use format: event <desc> /from <start> /to <end>");
                 }
             }
+            case FIND -> {
+                if (this.arg.isEmpty()) throw new MangoException(MangoException.ERR_FIND_EMPTY);
+            }
         }
         return this.arg;
     }

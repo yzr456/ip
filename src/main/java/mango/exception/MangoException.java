@@ -17,6 +17,8 @@ public class MangoException extends Exception {
     public static final String ERR_DELETE_EMPTY = "The index of the Task to be removed must be specified";
     public static final String ERR_DELETE_RANGE = "The index of the Task to removed must be within the list.";
 
+    public static final String ERR_FIND_EMPTY = "tHE Keyword for find cannot be empty.";
+
     public MangoException(String message) {
         super(message);
     }

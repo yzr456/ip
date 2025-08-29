@@ -18,12 +18,8 @@ public class TaskList {
         return this.tasks.size();
     }
 
-    public boolean isEmpty() {
-        return this.tasks.isEmpty();
-    }
-
     public List<Task> view() {
-       return this.tasks;
+        return this.tasks;
     }
 
     public Task add(Task t) {
@@ -35,6 +31,12 @@ public class TaskList {
         return this.tasks.remove(index);
     }
 
+    /**
+     * Retrieves the task at the specified index from the task list.
+     *
+     * @param index the zero-based index of the task to retrieve
+     * @return the {@link Task} at the given index
+     */
     public Task get(int index) {
         return this.tasks.get(index);
     }
@@ -49,5 +51,21 @@ public class TaskList {
         Task t = get(index);
         t.markAsNotDone();
         return t;
+    }
+
+    /**
+     * Finds tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword the search keyword
+     * @return list of matching tasks
+     */
+    public List<Task> find(String keyword) {
+        List<Task> results = new ArrayList<>();
+        for (Task t : tasks) {
+            if (t.description.contains(keyword)) {
+                results.add(t);
+            }
+        }
+        return results;
     }
 }

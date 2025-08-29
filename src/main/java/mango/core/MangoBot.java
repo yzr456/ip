@@ -83,6 +83,11 @@ class MangoBot {
                         storage.save(taskList.view());
                         ui.showRemoved(removed, taskList.size());
                     }
+
+                    case FIND -> {
+                        String keyword = p.getArg();
+                         ui.showFound(taskList.find(keyword));
+                    }
                 }
             } catch (MangoException e) {
                 ui.showError(e.getMessage());

@@ -9,6 +9,7 @@ public enum Command {
     DEADLINE("deadline", true),
     EVENT("event", true),
     DELETE("delete", true),
+    FIND("find", true),
     UNKNOWN("", false);
 
     private final String keyword;

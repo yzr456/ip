@@ -8,10 +8,12 @@ public class Todo extends Task {
         super(description);
     }
 
+    @Override
     protected String getTypeIcon() {
         return "T";
     }
 
+    @Override
     public String toFileString() {
         return "T | " + (isDone ? "1" : "0") + " | " + description;
     }

@@ -27,10 +27,12 @@ public class Event extends Task {
         this.to = LocalDateTime.parse(to, INPUT_FMT);
     }
 
+    @Override
     protected String getTypeIcon() {
         return "E";
     }
 
+    @Override
     public String toFileString() {
         return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
                 + from.format(INPUT_FMT) + " | " + to.format(INPUT_FMT);

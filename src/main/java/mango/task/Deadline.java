@@ -24,10 +24,12 @@ public class Deadline extends Task {
         this.by = LocalDateTime.parse(by, INPUT_FMT);
     }
 
+    @Override
     protected String getTypeIcon() {
         return "D";
     }
 
+    @Override
     public String toFileString() {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(INPUT_FMT);
     }

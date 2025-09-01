@@ -9,12 +9,12 @@ public class Todo extends Task {
     }
 
     @Override
-    protected String getTypeIcon() {
+    protected String getTypeIdentifier() {
         return "T";
     }
 
     @Override
     public String toFileString() {
-        return "T | " + (isDone ? "1" : "0") + " | " + description;
+        return "T | " + (this.isDone ? "1" : "0") + " | " + this.description;
     }
 }

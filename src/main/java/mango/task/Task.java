@@ -10,6 +10,12 @@ public abstract class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Constructs a new {@code Task} with the given description.
+     * By default, the task is marked as not done.
+     *
+     * @param description the description of the task
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
@@ -26,12 +32,12 @@ public abstract class Task {
     }
 
     /** @return "X" if task is done, otherwise a space. */
-    public String getStatusIcon() {
+    private String getStatusMark() {
         return (isDone ? "X" : " ");
     }
 
     /** @return one-letter task type identifier ("T", "D", or "E"). */
-    protected abstract String getTypeIcon();
+    protected abstract String getTypeIdentifier();
 
     /** @return serialized string representation for saving to file. */
     public abstract String toFileString();
@@ -56,12 +62,14 @@ public abstract class Task {
         case "E" -> t = new Event(desc, parts[3], parts[4]);
         default -> throw new IOException("Unknown task type: " + type);
         }
-        if (done) t.markAsDone();
+        if (done) {
+            t.markAsDone();
+        }
         return t;
     }
 
     @Override
     public String toString() {
-        return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + this.description;
+        return "[" + this.getTypeIdentifier() + "][" + this.getStatusMark() + "] " + this.description;
     }
 }

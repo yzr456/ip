@@ -7,12 +7,12 @@ import java.time.format.DateTimeFormatter;
  * An {@code Event} task with a start and end date/time.
  */
 public class Event extends Task {
-    private final LocalDateTime from;
-    private final LocalDateTime to;
     private static final DateTimeFormatter INPUT_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter OUTPUT_FMT =
             DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+    private final LocalDateTime from;
+    private final LocalDateTime to;
 
     /**
      * Constructs an {@code Event}.
@@ -28,13 +28,13 @@ public class Event extends Task {
     }
 
     @Override
-    protected String getTypeIcon() {
+    protected String getTypeIdentifier() {
         return "E";
     }
 
     @Override
     public String toFileString() {
-        return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
+        return "E | " + (this.isDone ? "1" : "0") + " | " + this.description + " | "
                 + from.format(INPUT_FMT) + " | " + to.format(INPUT_FMT);
     }
 

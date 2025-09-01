@@ -4,23 +4,26 @@ package mango.parser;
  * Enum representing all valid commands recognized by {@code MangoBot}.
  */
 public enum Command {
-    BYE("bye", false),
-    LIST("list", false),
-    MARK("mark", true),
-    UNMARK("unmark", true),
-    TODO("todo", true),
-    DEADLINE("deadline", true),
-    EVENT("event", true),
-    DELETE("delete", true),
-    FIND("find", true),
-    UNKNOWN("", false);
+    BYE("bye"),
+    LIST("list"),
+    MARK("mark"),
+    UNMARK("unmark"),
+    TODO("todo"),
+    DEADLINE("deadline"),
+    EVENT("event"),
+    DELETE("delete"),
+    FIND("find"),
+    UNKNOWN("");
 
     private final String keyword;
-    private final boolean needsArg;
 
-    Command(String keyword, boolean needsArg) {
+    /**
+     * Constructs a {@code Command} with its associated keyword.
+     *
+     * @param keyword the string that identifies this command
+     */
+    Command(String keyword) {
         this.keyword = keyword;
-        this.needsArg = needsArg;
     }
 
     /**
@@ -39,15 +42,13 @@ public enum Command {
     }
 
     /**
-     * Extracts argument from input for this command.
+     * Trims the command keyword from the beginning of the given input,
+     * leaving only the argument portion (if any).
      *
-     * @param input the raw user input
-     * @return the argument string (may be empty if no argument is required)
+     * @param input the full input string containing the command and its argument(s)
+     * @return the argument portion of the input, with leading/trailing whitespace removed
      */
-    public String arg(String input) {
-        if (!needsArg) {
-            return "";
-        }
+    public String trimArgument(String input) {
         return input.substring(this.keyword.length()).trim();
     }
 }

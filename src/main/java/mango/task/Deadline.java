@@ -7,11 +7,11 @@ import java.time.format.DateTimeFormatter;
  * A {@code Deadline} task that has a specific due date/time.
  */
 public class Deadline extends Task {
-    private final LocalDateTime by;
     private static final DateTimeFormatter INPUT_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter OUTPUT_FMT =
             DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+    private final LocalDateTime by;
 
     /**
      * Constructs a {@code Deadline} task.
@@ -25,13 +25,13 @@ public class Deadline extends Task {
     }
 
     @Override
-    protected String getTypeIcon() {
+    protected String getTypeIdentifier() {
         return "D";
     }
 
     @Override
     public String toFileString() {
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(INPUT_FMT);
+        return "D | " + (this.isDone ? "1" : "0") + " | " + this.description + " | " + by.format(INPUT_FMT);
     }
 
     @Override

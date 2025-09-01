@@ -2,6 +2,7 @@ package mango.ui;
 
 import java.util.List;
 import java.util.Scanner;
+
 import mango.task.Task;
 
 /**
@@ -39,24 +40,26 @@ public class Ui {
 
     /** Prints confirmation of task addition. */
     public void showAdded(Task t, int count) {
-        System.out.println(LINE + "\n Got it. I've added this task:\n   " + t +
-                "\n Now you have " + count + " tasks in the list.\n" + LINE);
+        System.out.println(LINE + "\n Got it. I've added this task:\n   "
+                + t + "\n Now you have " + count + " tasks in the list.\n" + LINE);
     }
 
     /** Prints confirmation of task removal. */
     public void showRemoved(Task removed, int count) {
-        System.out.println(LINE + "\n Noted. I've removed this task:\n   " + removed +
-                "\n Now you have " + count + " tasks in the list.\n" + LINE);
+        System.out.println(LINE + "\n Noted. I've removed this task:\n   "
+                + removed + "\n Now you have " + count + " tasks in the list.\n" + LINE);
     }
 
     /** Prints confirmation of task being marked done. */
     public void showMarked(Task t) {
-        System.out.println(LINE + "\n Nice! I've marked this task as done:\n   " + t + "\n" + LINE);
+        System.out.println(LINE + "\n Nice! I've marked this task as done:\n   "
+                + t + "\n" + LINE);
     }
 
     /** Prints confirmation of task being unmarked. */
     public void showUnmarked(Task t) {
-        System.out.println(LINE + "\n OK, I've marked this task as not done yet:\n   " + t + "\n" + LINE);
+        System.out.println(LINE + "\n OK, I've marked this task as not done yet:\n   "
+                + t + "\n" + LINE);
     }
 
     /** Shows the list of tasks. */

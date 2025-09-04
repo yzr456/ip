@@ -7,6 +7,7 @@ import mango.io.Storage;
 import mango.parser.Parser;
 import mango.task.Task;
 import mango.task.TaskList;
+import mango.ui.Messages;
 import mango.ui.Ui;
 
 /**
@@ -16,7 +17,7 @@ import mango.ui.Ui;
  * <p>The bot supports commands such as {@code todo}, {@code deadline}, {@code event},
  * {@code list}, {@code mark}, {@code unmark}, {@code delete}, and {@code bye}.
  */
-class MangoBot {
+public class MangoBot {
     private final Storage storage;
     private final TaskList taskList;
     private final Ui ui;
@@ -31,6 +32,50 @@ class MangoBot {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
         this.taskList = new TaskList(this.storage.load());
+    }
+
+    public String respond(String input) {
+        Parser p = new Parser(input);
+        try {
+            p.validateArgument();
+            return switch (p.getCommand()) {
+            case BYE -> Messages.byePlain();
+            case LIST -> Messages.listPlain(taskList.view());
+            case MARK -> {
+                int i = p.parseIndex(taskList.size());
+                Task t = taskList.mark(i);
+                storage.save(taskList.view());
+                yield Messages.markedPlain(t);
+            }
+
+            case UNMARK -> {
+                int i = p.parseIndex(taskList.size());
+                Task t = taskList.unmark(i);
+                storage.save(taskList.view());
+                yield Messages.unmarkedPlain(t);
+            }
+
+            case TODO, EVENT, DEADLINE -> {
+                Task t = taskList.add(p.parseArgument());
+                storage.save(taskList.view());
+                yield Messages.addedPlain(t, taskList.size());
+            }
+
+            case DELETE -> {
+                int i = p.parseIndex(taskList.size());
+                Task r = taskList.remove(i);
+                storage.save(taskList.view());
+                yield Messages.removedPlain(r, taskList.size());
+            }
+
+            case FIND -> Messages.foundPlain(taskList.find(p.getArgument()));
+            default -> Messages.invalidPlain();
+            };
+        } catch (MangoException e) {
+            return Messages.errorPlain(e.getMessage());
+        } catch (IOException e) {
+            return Messages.failedSavePlain();
+        }
     }
 
     /**
@@ -86,13 +131,13 @@ class MangoBot {
                     ui.showFound(taskList.find(keyword));
                 }
 
-                default -> throw new MangoException(MangoException.ERR_INVALID);
+                default -> ui.showInvalid();
 
                 }
             } catch (MangoException e) {
                 ui.showError(e.getMessage());
             } catch (IOException e) {
-                ui.showError("Failed to save tasks to disk.");
+                ui.showFailedSave();
             }
         }
     }

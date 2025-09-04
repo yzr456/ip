@@ -1,19 +1,26 @@
 package mango.task;
 
-import mango.exception.MangoException;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import mango.exception.MangoException;
 
 public class DeadlineTest {
 
     @Test
-    void toFileString_and_toString_formatsAreConsistent() throws MangoException {
+    void toFileString_formatIsConsistent() throws MangoException {
         Deadline d = new Deadline("return book", "2019-12-02 1800");
         String file = d.toFileString();
-        String shown = d.toString();
 
         assertTrue(file.startsWith("D | 0 | return book | 2019-12-02 1800"));
+    }
+
+    @Test
+    void toString_formatIsConsistent() throws MangoException {
+        Deadline d = new Deadline("return book", "2019-12-02 1800");
+        String shown = d.toString();
+
         assertTrue(shown.contains("return book"));
         assertTrue(shown.contains("Dec") || shown.contains("Dec ") || shown.contains("Dec 02")); // month name
     }

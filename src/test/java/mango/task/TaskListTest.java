@@ -1,13 +1,13 @@
 package mango.task;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class TaskListTest {
 
     @Test
-        void markAndUnmark_flipStatusButKeepObject() {
+    void markAndUnmark_flipStatusButKeepObject() {
         TaskList list = new TaskList();
         Task t = list.add(new Todo("buy milk"));
 

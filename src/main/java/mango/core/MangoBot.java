@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import mango.exception.MangoException;
 import mango.io.Storage;
+import mango.parser.Command;
 import mango.parser.Parser;
 import mango.task.Task;
 import mango.task.TaskList;
@@ -38,108 +39,71 @@ public class MangoBot {
         Parser p = new Parser(input);
         try {
             p.validateArgument();
-            return switch (p.getCommand()) {
-            case BYE -> Messages.byePlain();
-            case LIST -> Messages.listPlain(taskList.view());
-            case MARK -> {
-                int i = p.parseIndex(taskList.size());
-                Task t = taskList.mark(i);
-                storage.save(taskList.view());
-                yield Messages.markedPlain(t);
-            }
-
-            case UNMARK -> {
-                int i = p.parseIndex(taskList.size());
-                Task t = taskList.unmark(i);
-                storage.save(taskList.view());
-                yield Messages.unmarkedPlain(t);
-            }
-
-            case TODO, EVENT, DEADLINE -> {
-                Task t = taskList.add(p.parseArgument());
-                storage.save(taskList.view());
-                yield Messages.addedPlain(t, taskList.size());
-            }
-
-            case DELETE -> {
-                int i = p.parseIndex(taskList.size());
-                Task r = taskList.remove(i);
-                storage.save(taskList.view());
-                yield Messages.removedPlain(r, taskList.size());
-            }
-
-            case FIND -> Messages.foundPlain(taskList.find(p.getArgument()));
-            default -> Messages.invalidPlain();
-            };
+            return getMessage(p);
         } catch (MangoException e) {
-            return Messages.errorPlain(e.getMessage());
+            return Messages.error(e.getMessage());
         } catch (IOException e) {
-            return Messages.failedSavePlain();
+            return Messages.failedSave();
         }
     }
 
-    /**
-     * Runs the chatbot, continuously reading user input until the {@code bye} command is issued.
-     */
     public void run() {
         ui.showWelcome();
-
         while (true) {
             String input = ui.readCommand();
             Parser p = new Parser(input);
 
+            if (p.getCommand() == Command.BYE) {
+                ui.showBye();
+                ui.close();
+                return;
+            }
+
             try {
                 p.validateArgument();
-                switch (p.getCommand()) {
-                case BYE -> {
-                    ui.showBye();
-                    ui.close();
-                    return;
-                }
-
-                case LIST -> ui.showList(taskList.view());
-
-                case MARK -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task t = taskList.mark(idx);
-                    storage.save(taskList.view());
-                    ui.showMarked(t);
-                }
-
-                case UNMARK -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task t = taskList.unmark(idx);
-                    storage.save(taskList.view());
-                    ui.showUnmarked(t);
-                }
-
-                case TODO, EVENT, DEADLINE -> {
-                    Task t = taskList.add(p.parseArgument());
-                    storage.save(taskList.view());
-                    ui.showAdded(t, taskList.size());
-                }
-
-                case DELETE -> {
-                    int idx = p.parseIndex(taskList.size());
-                    Task removed = taskList.remove(idx);
-                    storage.save(taskList.view());
-                    ui.showRemoved(removed, taskList.size());
-                }
-
-                case FIND -> {
-                    String keyword = p.getArgument();
-                    ui.showFound(taskList.find(keyword));
-                }
-
-                default -> ui.showInvalid();
-
-                }
+                ui.showMessage(getMessage(p));
             } catch (MangoException e) {
                 ui.showError(e.getMessage());
             } catch (IOException e) {
                 ui.showFailedSave();
             }
         }
+    }
+
+    private String getMessage(Parser p) throws MangoException, IOException {
+        return switch (p.getCommand()) {
+        case BYE -> Messages.bye();
+        case LIST -> Messages.list(taskList.view());
+        case MARK -> {
+            int i = p.parseIndex(taskList.size());
+            Task t = taskList.mark(i);
+            storage.save(taskList.view());
+            yield Messages.marked(t);
+        }
+
+        case UNMARK -> {
+            int i = p.parseIndex(taskList.size());
+            Task t = taskList.unmark(i);
+            storage.save(taskList.view());
+            yield Messages.unmarked(t);
+        }
+
+        case TODO, EVENT, DEADLINE -> {
+            Task t = taskList.add(p.parseArgument());
+            storage.save(taskList.view());
+            yield Messages.added(t, taskList.size());
+        }
+
+        case DELETE -> {
+            int i = p.parseIndex(taskList.size());
+            Task r = taskList.remove(i);
+            storage.save(taskList.view());
+            yield Messages.removed(r, taskList.size());
+        }
+
+        case FIND -> Messages.found(taskList.find(p.getArgument()));
+        default -> Messages.invalid();
+        };
     }
 
     /**

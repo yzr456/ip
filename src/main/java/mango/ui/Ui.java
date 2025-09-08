@@ -1,55 +1,34 @@
 package mango.ui;
 
-import java.util.List;
 import java.util.Scanner;
 
-import mango.task.Task;
-
 public class Ui {
+    private static final String LINE = "____________________________________________________________";
     private final Scanner scanner = new Scanner(System.in);
 
+    public void showMessage(String message) {
+        String wrappedMessage = wrap(message);
+        System.out.println(wrappedMessage);
+    }
+
     public void showWelcome() {
-        System.out.println(Messages.welcome());
+        String wrappedWelcomeMessage = Messages.welcome();
+        System.out.println(wrappedWelcomeMessage);
     }
 
     public void showBye() {
-        System.out.println(Messages.bye());
+        String wrappedByeMessage = Messages.bye();
+        System.out.println(wrappedByeMessage);
     }
 
     public void showError(String message) {
-        System.out.println(Messages.error(message));
-    }
-
-    public void showInvalid() {
-        System.out.println(Messages.invalid());
+        String wrappedErrorMessage = Messages.error(message);
+        System.out.println(wrappedErrorMessage);
     }
 
     public void showFailedSave() {
-        System.out.println(Messages.failedSave());
-    }
-
-    public void showAdded(Task t, int count) {
-        System.out.println(Messages.added(t, count));
-    }
-
-    public void showRemoved(Task removed, int count) {
-        System.out.println(Messages.removed(removed, count));
-    }
-
-    public void showMarked(Task t) {
-        System.out.println(Messages.marked(t));
-    }
-
-    public void showUnmarked(Task t) {
-        System.out.println(Messages.unmarked(t));
-    }
-
-    public void showList(List<Task> tasks) {
-        System.out.println(Messages.list(tasks));
-    }
-
-    public void showFound(List<Task> tasks) {
-        System.out.println(Messages.found(tasks));
+        String wrappedFailedSaveMessage = Messages.failedSave();
+        System.out.println(wrappedFailedSaveMessage);
     }
 
     public String readCommand() {
@@ -58,5 +37,9 @@ public class Ui {
 
     public void close() {
         scanner.close();
+    }
+
+    private String wrap(String body) {
+        return LINE + "\n " + body + "\n" + LINE;
     }
 }

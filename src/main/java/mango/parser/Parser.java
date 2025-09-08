@@ -11,6 +11,10 @@ import mango.task.Todo;
  * into a {@link Command} and extracting relevant arguments.
  */
 public class Parser {
+    private static final String FROM_DELIMITER = " /from ";
+    private static final String TO_DELIMITER = " /to ";
+    private static final int FROM_DELIMITER_LENGTH = FROM_DELIMITER.length();
+    private static final int TO_DELIMITER_LENGTH = TO_DELIMITER.length();
     private final Command command;
     private final String argument;
 
@@ -92,15 +96,18 @@ public class Parser {
 
         case DEADLINE -> {
             String[] parts = this.argument.split(" /by ", 2);
-            return new Deadline(parts[0].trim(), parts[1].trim());
+            String desc = parts[0].trim();
+            String by = parts[1].trim();
+            return new Deadline(desc, by);
         }
 
         case EVENT -> {
-            int indexOfFrom = this.argument.indexOf(" /from ");
-            int indexOfTo = this.argument.indexOf(" /to ", indexOfFrom + 7);
+            int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
+            int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
+
             String desc = this.argument.substring(0, indexOfFrom).trim();
-            String from = this.argument.substring(indexOfFrom + 7, indexOfTo).trim();
-            String to = this.argument.substring(indexOfTo + 5).trim();
+            String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
+            String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
             return new Event(desc, from, to);
         }
 
@@ -111,11 +118,11 @@ public class Parser {
     /**
      * Parses an index argument (for mark, unmark, delete commands).
      *
-     * @param size the number of tasks in the list
+     * @param listSize the number of tasks in the list
      * @return the zero-based index
      * @throws MangoException if the index is missing, non-numeric, or out of range
      */
-    public int parseIndex(int size) throws MangoException {
+    public int parseIndex(int listSize) throws MangoException {
 
         int oneBasedIndex;
         try {
@@ -123,7 +130,12 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new MangoException(MangoException.ERR_NAN);
         }
-        if (oneBasedIndex <= 0 || oneBasedIndex > size) {
+        validateRange(oneBasedIndex, listSize);
+        return oneBasedIndex - 1;
+    }
+
+    private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
+        if (oneBasedIndex <= 0 || oneBasedIndex > listSize) {
             switch (this.command) {
             case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);
             case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_RANGE);
@@ -131,6 +143,5 @@ public class Parser {
             default -> throw new MangoException(MangoException.ERR_INVALID);
             }
         }
-        return oneBasedIndex - 1;
     }
 }

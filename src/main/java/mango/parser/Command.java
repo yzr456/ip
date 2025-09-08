@@ -49,6 +49,7 @@ public enum Command {
      * @return the argument portion of the input, with leading/trailing whitespace removed
      */
     public String trimArgument(String input) {
-        return input.substring(this.keyword.length()).trim();
+        String argument = input.substring(this.keyword.length());
+        return argument.trim();
     }
 }

@@ -40,7 +40,7 @@ public class MainWindow extends AnchorPane {
     public void setMangoBot(MangoBot mangoBot) {
         this.mangoBot = mangoBot;
         dialogContainer.getChildren().add(
-                DialogBox.getMangoBotDialog(Messages.welcomePlain(), mangoBotImage)
+                DialogBox.getMangoBotDialog(Messages.welcome(), mangoBotImage)
         );
     }
 

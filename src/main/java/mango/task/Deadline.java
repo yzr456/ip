@@ -7,10 +7,12 @@ import java.time.format.DateTimeFormatter;
  * A {@code Deadline} task that has a specific due date/time.
  */
 public class Deadline extends Task {
+    private static final String TYPE = "D";
     private static final DateTimeFormatter INPUT_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter OUTPUT_FMT =
             DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma");
+
     private final LocalDateTime by;
 
     /**
@@ -26,12 +28,13 @@ public class Deadline extends Task {
 
     @Override
     protected String getTypeIdentifier() {
-        return "D";
+        return TYPE;
     }
 
     @Override
     public String toFileString() {
-        return "D | " + (this.isDone ? "1" : "0") + " | " + this.description + " | " + by.format(INPUT_FMT);
+        return TYPE + FILE_SEP + statusFlag() + FILE_SEP
+                + this.description + FILE_SEP + by.format(INPUT_FMT);
     }
 
     @Override

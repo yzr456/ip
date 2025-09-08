@@ -1,6 +1,7 @@
 package mango.io;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,10 +56,15 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-        for (String line : Files.readAllLines(filePath)) {
-            tasks.add(Task.fromFileString(line));
-        }
-        return tasks;
+        return Files.lines(filePath)
+                .map(line -> {
+                    try {
+                        return Task.fromFileString(line);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                })
+                .toList();
     }
 
     /**
@@ -68,10 +74,10 @@ public class Storage {
      * @throws IOException if an error occurs while writing to the file
      */
     public void save(List<Task> tasks) throws IOException {
-        List<String> lines = new ArrayList<>();
-        for (Task t : tasks) {
-            lines.add(t.toFileString());
-        }
-        Files.write(filePath, lines);
+        Files.write(filePath,
+                tasks.stream()
+                        .map(t -> t.toFileString())
+                        .toList()
+        );
     }
 }

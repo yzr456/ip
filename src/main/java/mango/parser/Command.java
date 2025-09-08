@@ -1,5 +1,7 @@
 package mango.parser;
 
+import java.util.stream.Stream;
+
 /**
  * Enum representing all valid commands recognized by {@code MangoBot}.
  */
@@ -33,12 +35,10 @@ public enum Command {
      * @return the parsed command, or {@link #UNKNOWN} if none matches
      */
     public static Command of(String input) {
-        for (Command c : values()) {
-            if (c.keyword.equals(input) || input.startsWith(c.keyword + " ")) {
-                return c;
-            }
-        }
-        return UNKNOWN;
+        return Stream.of(values())
+                .filter(c -> input.startsWith(c.keyword))
+                .findFirst()
+                .orElse(UNKNOWN);
     }
 
     /**
@@ -48,7 +48,7 @@ public enum Command {
      * @param input the full input string containing the command and its argument(s)
      * @return the argument portion of the input, with leading/trailing whitespace removed
      */
-    public String trimArgument(String input) {
+    public String trimKeyword(String input) {
         return input.substring(this.keyword.length()).trim();
     }
 }

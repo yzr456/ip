@@ -106,12 +106,8 @@ public class TaskList {
      * @return list of matching tasks
      */
     public List<Task> find(String keyword) {
-        List<Task> results = new ArrayList<>();
-        for (Task t : tasks) {
-            if (t.description.contains(keyword)) {
-                results.add(t);
-            }
-        }
-        return results;
+        return this.tasks.stream()
+                .filter(t -> t.description.contains(keyword))
+                .toList();
     }
 }

@@ -21,7 +21,7 @@ public class Parser {
      */
     public Parser(String input) {
         this.command = Command.of(input);
-        this.argument = this.command.trimArgument(input);
+        this.argument = this.command.trimKeyword(input);
     }
 
     /**

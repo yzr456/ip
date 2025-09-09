@@ -31,10 +31,6 @@ public class Storage {
         assert Files.exists(this.filePath) : "Storage file must exist after init()";
     }
 
-    private static <T> void assertNonNull(T value, String message) {
-        assert value != null : message;
-    }
-
     /**
      * Ensures the storage file and parent directories exist.
      *
@@ -61,7 +57,6 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-
         return Files.lines(filePath)
                 .peek(line -> {
                     assert line != null : "Read line must be non-null";
@@ -86,7 +81,9 @@ public class Storage {
         assert tasks != null : "Null list should not be saved";
         Files.write(filePath,
                 tasks.stream()
-                        .peek(t -> assertNonNull(t, "Cannot save null task"))
+                        .peek(t -> {
+                            assert t != null : "Cannot save null task";
+                        })
                         .map(t -> t.toFileString())
                         .toList()
         );

@@ -53,8 +53,8 @@ public abstract class Task {
         String type = parts[TYPE_INDEX];
         boolean isDone = FLAG_DONE.equals(parts[FLAG_INDEX]);
         String desc = parts[DESC_INDEX];
-
         Task task = constructTaskFromType(type, desc, parts);
+
         if (isDone) {
             task.markAsDone();
         }

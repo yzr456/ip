@@ -119,7 +119,6 @@ public class TaskList {
      */
     public List<Task> find(String keyword) {
         assert keyword != null : "Keyword must be non-null (empty allowed)";
-
         List<Task> results = this.tasks.stream()
                 .peek(t -> {
                     assert t != null : "Task list must not contain nulls";

@@ -75,39 +75,36 @@ public class MangoBot {
     private String getMessage(Parser p) throws MangoException, IOException {
         assert p.getCommand() != null : "Parser must set a non-null command";
         return switch (p.getCommand()) {
-        case BYE -> Messages.bye();
-        case LIST -> Messages.list(taskList.view());
-        case MARK -> {
-            int i = p.parseIndex(taskList.size());
-            assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
-            Task t = taskList.mark(i);
-            storage.save(taskList.view());
-            yield Messages.marked(t);
-        }
-
-        case UNMARK -> {
-            int i = p.parseIndex(taskList.size());
-            Task t = taskList.unmark(i);
-            storage.save(taskList.view());
-            yield Messages.unmarked(t);
-        }
-
-        case TODO, EVENT, DEADLINE -> {
-            Task t = taskList.add(p.parseArgument());
-            assert taskList.view().contains(t) : "Added task must be present in list";
-            storage.save(taskList.view());
-            yield Messages.added(t, taskList.size());
-        }
-
-        case DELETE -> {
-            int i = p.parseIndex(taskList.size());
-            Task r = taskList.remove(i);
-            storage.save(taskList.view());
-            yield Messages.removed(r, taskList.size());
-        }
-
-        case FIND -> Messages.found(taskList.find(p.getArgument()));
-        default -> Messages.invalid();
+            case BYE -> Messages.bye();
+            case LIST -> Messages.list(taskList.view());
+            case MARK -> {
+                int i = p.parseIndex(taskList.size());
+                assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
+                Task t = taskList.mark(i);
+                storage.save(taskList.view());
+                yield Messages.marked(t);
+            }
+            case UNMARK -> {
+                int i = p.parseIndex(taskList.size());
+                assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
+                Task t = taskList.unmark(i);
+                storage.save(taskList.view());
+                yield Messages.unmarked(t);
+            }
+            case TODO, EVENT, DEADLINE -> {
+                Task t = taskList.add(p.parseArgument());
+                assert taskList.view().contains(t) : "Added task must be present in list";
+                storage.save(taskList.view());
+                yield Messages.added(t, taskList.size());
+            }
+            case DELETE -> {
+                int i = p.parseIndex(taskList.size());
+                Task r = taskList.remove(i);
+                storage.save(taskList.view());
+                yield Messages.removed(r, taskList.size());
+            }
+            case FIND -> Messages.found(taskList.find(p.getArgument()));
+            default -> Messages.invalid();
         };
     }
 

@@ -11,6 +11,7 @@ import mango.task.Todo;
  * into a {@link Command} and extracting relevant arguments.
  */
 public class Parser {
+    private static final String BY_DELIMITER   = " /by ";
     private static final String FROM_DELIMITER = " /from ";
     private static final String TO_DELIMITER = " /to ";
     private static final int FROM_DELIMITER_LENGTH = FROM_DELIMITER.length();
@@ -55,34 +56,8 @@ public class Parser {
      * @throws MangoException if the argument is missing or invalid
      */
     public void validateArgument() throws MangoException {
-        if (this.argument.isEmpty()) {
-            switch (this.command) {
-            case MARK -> throw new MangoException(MangoException.ERR_MARK_EMPTY);
-            case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_EMPTY);
-            case TODO -> throw new MangoException(MangoException.ERR_TODO_EMPTY);
-            case EVENT -> throw new MangoException(MangoException.ERR_EVENT_EMPTY);
-            case DEADLINE -> throw new MangoException(MangoException.ERR_DEADLINE_EMPTY);
-            case DELETE -> throw new MangoException(MangoException.ERR_DELETE_EMPTY);
-            case FIND -> throw new MangoException(MangoException.ERR_FIND_EMPTY);
-            default -> { }
-            }
-        }
-
-        switch (this.command) {
-        case DEADLINE -> {
-            if (!this.argument.contains(" /by ")) {
-                throw new MangoException("Deadline must use format: deadline <desc> /by <time>");
-            }
-        }
-
-        case EVENT -> {
-            if (!this.argument.contains(" /from ") || !this.argument.contains(" /to ")) {
-                throw new MangoException("Event must use format: event <desc> /from <start> /to <end>");
-            }
-        }
-
-        default -> { }
-        }
+        validateArgumentPresence();
+        validateArgumentFormat();
     }
 
     /**
@@ -92,35 +67,12 @@ public class Parser {
      * @throws MangoException if the command is not a task-creation command or the argument is invalid
      */
     public Task parseArgument() throws MangoException {
-        switch (this.command) {
-        case TODO -> {
-            assert !this.argument.isEmpty() : "TODO requires non-empty description (should be validated)";
-            return new Todo(this.argument);
-        }
-
-        case DEADLINE -> {
-            String[] parts = this.argument.split(" /by ", 2);
-            assert parts.length == 2 : "validateArgument has /by";
-            assert !parts[0].trim().isEmpty() && !parts[1].trim().isEmpty()
-                    : "Both desc and by must be non-empty";
-            String desc = parts[0].trim();
-            String by = parts[1].trim();
-            return new Deadline(desc, by);
-        }
-
-        case EVENT -> {
-            int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
-            int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
-            assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "validateArgument has /from and /to";
-            String desc = this.argument.substring(0, indexOfFrom).trim();
-            String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
-            String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
-            assert !desc.isEmpty() && !from.isEmpty() && !to.isEmpty() : "desc/from/to must be non-empty";
-            return new Event(desc, from, to);
-        }
-
-        default -> throw new MangoException(MangoException.ERR_INVALID);
-        }
+        return switch (this.command) {
+            case TODO -> parseTodo();
+            case DEADLINE -> parseDeadline();
+            case EVENT -> parseEvent();
+            default -> throw new MangoException(MangoException.ERR_INVALID);
+        };
     }
 
     /**
@@ -132,26 +84,95 @@ public class Parser {
      */
     public int parseIndex(int listSize) throws MangoException {
         assert listSize >= 0 : "Task list size must be non-negative";
-        int oneBasedIndex;
-        try {
-            oneBasedIndex = Integer.parseInt(this.argument);
-        } catch (NumberFormatException e) {
-            throw new MangoException(MangoException.ERR_NAN);
-        }
+        int oneBasedIndex = parseOneBasedIndex();
         validateRange(oneBasedIndex, listSize);
         int zeroBasedIndex = oneBasedIndex - 1;
         assert zeroBasedIndex >= 0 && zeroBasedIndex < listSize : "Returned index must be within bounds";
         return zeroBasedIndex;
     }
 
+    private void validateArgumentPresence() throws MangoException {
+        if (!this.argument.isEmpty()) {
+            return;
+        }
+
+        switch (this.command) {
+            case MARK -> throw new MangoException(MangoException.ERR_MARK_EMPTY);
+            case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_EMPTY);
+            case TODO -> throw new MangoException(MangoException.ERR_TODO_EMPTY);
+            case EVENT -> throw new MangoException(MangoException.ERR_EVENT_EMPTY);
+            case DEADLINE -> throw new MangoException(MangoException.ERR_DEADLINE_EMPTY);
+            case DELETE -> throw new MangoException(MangoException.ERR_DELETE_EMPTY);
+            case FIND -> throw new MangoException(MangoException.ERR_FIND_EMPTY);
+            default -> { }
+        }
+    }
+
+    private void validateArgumentFormat() throws MangoException {
+        switch (this.command) {
+            case DEADLINE -> {
+                if (!this.argument.contains(BY_DELIMITER)) {
+                    throw new MangoException("Deadline must use format: deadline <desc> " + BY_DELIMITER + " <time>");
+                }
+            }
+            case EVENT -> {
+                if (!this.argument.contains(FROM_DELIMITER) || !this.argument.contains(TO_DELIMITER)) {
+                    throw new MangoException("Event must use format: event <desc> " + FROM_DELIMITER + " <start> " + TO_DELIMITER + " <end>");
+                }
+            }
+            default -> { }
+        }
+    }
+
+    private Task parseTodo() {
+        assert !this.argument.isEmpty() : "Argument must have description";
+        return new Todo(this.argument);
+    }
+
+    private Task parseDeadline() {
+        String[] parts = this.argument.split(BY_DELIMITER, 2);
+        assert parts.length == 2 : "Argument must have " + BY_DELIMITER;
+        String desc = parts[0].trim();
+        String by = parts[1].trim();
+        assertNonBlank(desc, "Deadline description must be non-empty");
+        assertNonBlank(by, "Deadline date/time must be non-empty");
+        return new Deadline(desc, by);
+    }
+
+    private Task parseEvent() {
+        int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
+        int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
+        assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "Argument must have " + FROM_DELIMITER + " and " + TO_DELIMITER;
+        String desc = this.argument.substring(0, indexOfFrom).trim();
+        String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
+        String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
+        assertNonBlank(desc, "Event description must be non-empty");
+        assertNonBlank(from, "Event  must be non-empty");
+        assertNonBlank(to, "Event description must be non-empty");
+        return new Event(desc, from, to);
+    }
+
+    private void assertNonBlank(String s, String message) {
+        assert s != null;
+        assert !s.isEmpty() : message;
+    }
+
+    private int parseOneBasedIndex() throws MangoException {
+        try {
+            return Integer.parseInt(this.argument);
+        } catch (NumberFormatException e) {
+            throw new MangoException(MangoException.ERR_NAN);
+        }
+    }
+
     private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
         assert oneBasedIndex != 0 : "A zero index would be invalid for 1-based input";
         if (oneBasedIndex <= 0 || oneBasedIndex > listSize) {
             switch (this.command) {
-            case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);
-            case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_RANGE);
-            case DELETE -> throw new MangoException(MangoException.ERR_DELETE_RANGE);
-            default -> throw new MangoException(MangoException.ERR_INVALID);
+                case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);
+                case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_RANGE);
+                case DELETE -> throw new MangoException(MangoException.ERR_DELETE_RANGE);
+                default -> throw new MangoException(MangoException.ERR_INVALID);
             }
         }
     }

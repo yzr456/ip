@@ -24,8 +24,11 @@ public class Parser {
      * @param input the full command string entered by the user
      */
     public Parser(String input) {
+        assert input != null : "Parser expects non-null raw input";
         this.command = Command.of(input);
         this.argument = this.command.trimArgument(input);
+        assert this.command != null : "Command must not be null";
+        assert this.argument != null : "Argument must not be null (empty string is fine)";
     }
 
     /**
@@ -91,11 +94,15 @@ public class Parser {
     public Task parseArgument() throws MangoException {
         switch (this.command) {
         case TODO -> {
+            assert !this.argument.isEmpty() : "TODO requires non-empty description (should be validated)";
             return new Todo(this.argument);
         }
 
         case DEADLINE -> {
             String[] parts = this.argument.split(" /by ", 2);
+            assert parts.length == 2 : "validateArgument has /by";
+            assert !parts[0].trim().isEmpty() && !parts[1].trim().isEmpty()
+                    : "Both desc and by must be non-empty";
             String desc = parts[0].trim();
             String by = parts[1].trim();
             return new Deadline(desc, by);
@@ -104,10 +111,11 @@ public class Parser {
         case EVENT -> {
             int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
             int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
-
+            assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "validateArgument has /from and /to";
             String desc = this.argument.substring(0, indexOfFrom).trim();
             String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
             String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
+            assert !desc.isEmpty() && !from.isEmpty() && !to.isEmpty() : "desc/from/to must be non-empty";
             return new Event(desc, from, to);
         }
 
@@ -123,7 +131,7 @@ public class Parser {
      * @throws MangoException if the index is missing, non-numeric, or out of range
      */
     public int parseIndex(int listSize) throws MangoException {
-
+        assert listSize >= 0 : "Task list size must be non-negative";
         int oneBasedIndex;
         try {
             oneBasedIndex = Integer.parseInt(this.argument);
@@ -131,10 +139,13 @@ public class Parser {
             throw new MangoException(MangoException.ERR_NAN);
         }
         validateRange(oneBasedIndex, listSize);
-        return oneBasedIndex - 1;
+        int zeroBasedIndex = oneBasedIndex - 1;
+        assert zeroBasedIndex >= 0 && zeroBasedIndex < listSize : "Returned index must be within bounds";
+        return zeroBasedIndex;
     }
 
     private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
+        assert oneBasedIndex != 0 : "A zero index would be invalid for 1-based input";
         if (oneBasedIndex <= 0 || oneBasedIndex > listSize) {
             switch (this.command) {
             case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);

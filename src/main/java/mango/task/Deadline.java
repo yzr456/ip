@@ -23,6 +23,7 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) {
         super(description);
+        assert by != null && !by.isBlank() : "Deadline 'by' must be non-empty";
         this.by = LocalDateTime.parse(by, INPUT_FMT);
     }
 
@@ -33,6 +34,7 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
+        assert this.by != null : "by must be parsed";
         return TYPE + FILE_SEP + statusFlag() + FILE_SEP
                 + this.description + FILE_SEP + by.format(INPUT_FMT);
     }

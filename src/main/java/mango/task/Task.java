@@ -36,6 +36,7 @@ public abstract class Task {
      * @param description the description of the task
      */
     public Task(String description) {
+        assert description != null : "Task description must be non-null";
         this.description = description;
         this.isDone = false;
     }

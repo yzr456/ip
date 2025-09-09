@@ -36,6 +36,7 @@ public class MangoBot {
     }
 
     public String respond(String input) {
+        assert input != null : "respond() expects non-null input";
         Parser p = new Parser(input);
         try {
             p.validateArgument();
@@ -51,6 +52,7 @@ public class MangoBot {
         ui.showWelcome();
         while (true) {
             String input = ui.readCommand();
+            assert input != null : "Console input should not be null";
             Parser p = new Parser(input);
 
             if (p.getCommand() == Command.BYE) {
@@ -71,11 +73,13 @@ public class MangoBot {
     }
 
     private String getMessage(Parser p) throws MangoException, IOException {
+        assert p.getCommand() != null : "Parser must set a non-null command";
         return switch (p.getCommand()) {
         case BYE -> Messages.bye();
         case LIST -> Messages.list(taskList.view());
         case MARK -> {
             int i = p.parseIndex(taskList.size());
+            assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
             Task t = taskList.mark(i);
             storage.save(taskList.view());
             yield Messages.marked(t);
@@ -90,6 +94,7 @@ public class MangoBot {
 
         case TODO, EVENT, DEADLINE -> {
             Task t = taskList.add(p.parseArgument());
+            assert taskList.view().contains(t) : "Added task must be present in list";
             storage.save(taskList.view());
             yield Messages.added(t, taskList.size());
         }

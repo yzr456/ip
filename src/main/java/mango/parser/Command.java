@@ -33,6 +33,7 @@ public enum Command {
      * @return the parsed command, or {@link #UNKNOWN} if none matches
      */
     public static Command of(String input) {
+        assert input != null : "Command.of expects non-null input";
         for (Command c : values()) {
             if (c.keyword.equals(input) || input.startsWith(c.keyword + " ")) {
                 return c;
@@ -49,6 +50,9 @@ public enum Command {
      * @return the argument portion of the input, with leading/trailing whitespace removed
      */
     public String trimArgument(String input) {
+        assert input != null : "trimArgument expects non-null input";
+        assert input.startsWith(this.keyword)
+                : "Input should start with command keyword (or UNKNOWN)";
         String argument = input.substring(this.keyword.length());
         return argument.trim();
     }

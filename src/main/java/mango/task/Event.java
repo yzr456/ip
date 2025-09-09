@@ -25,8 +25,10 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) {
         super(description);
+        assert from != null && to != null : "Event times must be non-null";
         this.from = LocalDateTime.parse(from, INPUT_FMT);
         this.to = LocalDateTime.parse(to, INPUT_FMT);
+        assert !this.to.isBefore(this.from) : "Event end time must be >= start time";
     }
 
     @Override
@@ -36,6 +38,8 @@ public class Event extends Task {
 
     @Override
     public String toFileString() {
+        assert this.from != null : "from must be parsed";
+        assert this.to != null : "to must be parsed";
         return TYPE + FILE_SEP + statusFlag() + FILE_SEP + this.description
                 + FILE_SEP + from.format(INPUT_FMT)
                 + FILE_SEP + to.format(INPUT_FMT);

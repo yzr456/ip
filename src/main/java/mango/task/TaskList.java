@@ -23,6 +23,7 @@ public class TaskList {
      * @param initial the initial list of tasks
      */
     public TaskList(List<Task> initial) {
+        assert initial != null : "Initial list must be non-null";
         this.tasks = new ArrayList<>(initial);
     }
 
@@ -32,7 +33,9 @@ public class TaskList {
      * @return the task count
      */
     public int size() {
-        return this.tasks.size();
+        int s = this.tasks.size();
+        assert s >= 0 : "Size cannot be negative";
+        return s;
     }
 
     /**
@@ -51,7 +54,9 @@ public class TaskList {
      * @return the added task
      */
     public Task add(Task t) {
+        assert t != null : "Cannot add null task";
         this.tasks.add(t);
+        assert this.tasks.contains(t) : "Added task must be present";
         return t;
     }
 
@@ -62,7 +67,10 @@ public class TaskList {
      * @return the removed task
      */
     public Task remove(int index) {
-        return this.tasks.remove(index);
+        assert index >= 0 && index < tasks.size() : "Index in range";
+        Task r = this.tasks.remove(index);
+        assert r != null : "Removed task should be non-null";
+        return r;
     }
 
     /**
@@ -74,6 +82,7 @@ public class TaskList {
     public Task mark(int index) {
         Task t = get(index);
         t.markAsDone();
+        assert t.isDone : "Task should be marked done";
         return t;
     }
 
@@ -86,6 +95,7 @@ public class TaskList {
     public Task unmark(int index) {
         Task t = get(index);
         t.markAsNotDone();
+        assert !t.isDone : "Task should be marked not done";
         return t;
     }
 
@@ -96,7 +106,9 @@ public class TaskList {
      * @return the {@link Task} at the given index
      */
     public Task get(int index) {
-        return this.tasks.get(index);
+        Task t = this.tasks.get(index);
+        assert t != null : "Stored task should be non-null";
+        return t;
     }
 
     /**
@@ -106,11 +118,15 @@ public class TaskList {
      * @return list of matching tasks
      */
     public List<Task> find(String keyword) {
+        assert keyword != null : "Keyword must be non-null (empty allowed)";
         List<Task> results = new ArrayList<>();
         for (Task t : tasks) {
             if (t.description.contains(keyword)) {
                 results.add(t);
             }
+        }
+        for (Task t : results) {
+            assert t.description.contains(keyword) : "Result must contain keyword";
         }
         return results;
     }

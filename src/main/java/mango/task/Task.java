@@ -17,6 +17,7 @@ public abstract class Task {
      * @param description the description of the task
      */
     public Task(String description) {
+        assert description != null : "Task description must be non-null";
         this.description = description;
         this.isDone = false;
     }
@@ -50,7 +51,9 @@ public abstract class Task {
      * @throws IOException if the type is unknown
      */
     public static Task fromFileString(String line) throws IOException {
+        assert line != null : "fromFileString expects non-null line";
         String[] parts = line.split(" \\| ");
+        assert parts.length >= 3 : "Serialized task must have at least 3 fields";
         String type = parts[0];
         boolean done = parts[1].equals("1");
         String desc = parts[2];
@@ -65,6 +68,7 @@ public abstract class Task {
         if (done) {
             t.markAsDone();
         }
+        assert t != null : "Deserializer must produce a task";
         return t;
     }
 

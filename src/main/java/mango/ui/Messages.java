@@ -53,14 +53,11 @@ public final class Messages {
     }
 
     private static String enumerateTasks(String header, String textToShow, List<Task> tasks) {
-        StringBuilder sb = new StringBuilder(header);
         if (tasks.isEmpty()) {
-            sb.append("\n").append(textToShow);
-        } else {
-            for (int i = 0; i < tasks.size(); i++) {
-                sb.append("\n ").append(i + 1).append(".").append(tasks.get(i));
-            }
+            return header + "\n" + textToShow;
         }
-        return sb.toString();
+        return header + tasks.stream()
+                .map(task -> (tasks.indexOf(task) + 1) + "." + task)
+                .reduce("", (acc, line) -> acc + "\n" + line);
     }
 }

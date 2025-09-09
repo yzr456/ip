@@ -11,6 +11,10 @@ import mango.task.Todo;
  * into a {@link Command} and extracting relevant arguments.
  */
 public class Parser {
+    private static final String FROM_DELIMITER = " /from ";
+    private static final String TO_DELIMITER = " /to ";
+    private static final int FROM_DELIMITER_LENGTH = FROM_DELIMITER.length();
+    private static final int TO_DELIMITER_LENGTH = TO_DELIMITER.length();
     private final Command command;
     private final String argument;
 
@@ -99,16 +103,18 @@ public class Parser {
             assert parts.length == 2 : "validateArgument has /by";
             assert !parts[0].trim().isEmpty() && !parts[1].trim().isEmpty()
                     : "Both desc and by must be non-empty";
-            return new Deadline(parts[0].trim(), parts[1].trim());
+            String desc = parts[0].trim();
+            String by = parts[1].trim();
+            return new Deadline(desc, by);
         }
 
         case EVENT -> {
-            int indexOfFrom = this.argument.indexOf(" /from ");
-            int indexOfTo = this.argument.indexOf(" /to ", indexOfFrom + 7);
+            int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
+            int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
             assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "validateArgument has /from and /to";
             String desc = this.argument.substring(0, indexOfFrom).trim();
-            String from = this.argument.substring(indexOfFrom + 7, indexOfTo).trim();
-            String to = this.argument.substring(indexOfTo + 5).trim();
+            String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
+            String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
             assert !desc.isEmpty() && !from.isEmpty() && !to.isEmpty() : "desc/from/to must be non-empty";
             return new Event(desc, from, to);
         }
@@ -120,20 +126,27 @@ public class Parser {
     /**
      * Parses an index argument (for mark, unmark, delete commands).
      *
-     * @param size the number of tasks in the list
+     * @param listSize the number of tasks in the list
      * @return the zero-based index
      * @throws MangoException if the index is missing, non-numeric, or out of range
      */
-    public int parseIndex(int size) throws MangoException {
-        assert size >= 0 : "Task list size must be non-negative";
+    public int parseIndex(int listSize) throws MangoException {
+        assert listSize >= 0 : "Task list size must be non-negative";
         int oneBasedIndex;
         try {
             oneBasedIndex = Integer.parseInt(this.argument);
         } catch (NumberFormatException e) {
             throw new MangoException(MangoException.ERR_NAN);
         }
+        validateRange(oneBasedIndex, listSize);
+        int zeroBasedIndex = oneBasedIndex - 1;
+        assert zeroBasedIndex >= 0 && zeroBasedIndex < listSize : "Returned index must be within bounds";
+        return zeroBasedIndex;
+    }
+
+    private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
         assert oneBasedIndex != 0 : "A zero index would be invalid for 1-based input";
-        if (oneBasedIndex <= 0 || oneBasedIndex > size) {
+        if (oneBasedIndex <= 0 || oneBasedIndex > listSize) {
             switch (this.command) {
             case MARK -> throw new MangoException(MangoException.ERR_MARK_RANGE);
             case UNMARK -> throw new MangoException(MangoException.ERR_UNMARK_RANGE);
@@ -141,8 +154,5 @@ public class Parser {
             default -> throw new MangoException(MangoException.ERR_INVALID);
             }
         }
-        int zeroBasedIndex = oneBasedIndex - 1;
-        assert zeroBasedIndex >= 0 && zeroBasedIndex < size : "Returned index must be within bounds";
-        return zeroBasedIndex;
     }
 }

@@ -4,17 +4,19 @@ package mango.task;
  * A {@code Todo} is the simplest type of task, without a date or time.
  */
 public class Todo extends Task {
+    private static final String TYPE = "T";
+
     public Todo(String description) {
         super(description);
     }
 
     @Override
     protected String getTypeIdentifier() {
-        return "T";
+        return TYPE;
     }
 
     @Override
     public String toFileString() {
-        return "T | " + (this.isDone ? "1" : "0") + " | " + this.description;
+        return TYPE + FILE_SEP + statusFlag() + FILE_SEP + this.description;
     }
 }

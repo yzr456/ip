@@ -53,6 +53,7 @@ public enum Command {
         assert input != null : "trimArgument expects non-null input";
         assert input.startsWith(this.keyword)
                 : "Input should start with command keyword (or UNKNOWN)";
-        return input.substring(this.keyword.length()).trim();
+        String argument = input.substring(this.keyword.length());
+        return argument.trim();
     }
 }

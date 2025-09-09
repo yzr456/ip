@@ -13,7 +13,6 @@ import mango.core.MangoBot;
  * A GUI for Duke using FXML.
  */
 public class Main extends Application {
-    private MangoBot mangoBot;
 
     @Override
     public void start(Stage stage) {
@@ -26,9 +25,9 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setTitle("MangoBot");
 
-            this.mangoBot = new MangoBot("./data/mango.txt");
-            assert this.mangoBot != null : "MangoBot must be created";
-            fxmlLoader.<MainWindow>getController().setMangoBot(this.mangoBot);
+            MangoBot mangoBot = new MangoBot("./data/mango.txt");
+            assert mangoBot != null : "MangoBot must be created";
+            fxmlLoader.<MainWindow>getController().setMangoBot(mangoBot);
 
             stage.show();
         } catch (IOException e) {

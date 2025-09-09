@@ -41,7 +41,7 @@ public class MainWindow extends AnchorPane {
         assert mangoBot != null : "Injected MangoBot must be non-null";
         this.mangoBot = mangoBot;
         dialogContainer.getChildren().add(
-                DialogBox.getMangoBotDialog(Messages.welcomePlain(), mangoBotImage)
+                DialogBox.getMangoBotDialog(Messages.welcome(), mangoBotImage)
         );
     }
 

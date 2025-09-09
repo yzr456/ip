@@ -23,8 +23,10 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) {
         super(description);
+        assert from != null && to != null : "Event times must be non-null";
         this.from = LocalDateTime.parse(from, INPUT_FMT);
         this.to = LocalDateTime.parse(to, INPUT_FMT);
+        assert !this.to.isBefore(this.from) : "Event end time must be >= start time";
     }
 
     @Override

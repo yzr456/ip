@@ -1,6 +1,7 @@
 package mango.io;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +31,10 @@ public class Storage {
         assert Files.exists(this.filePath) : "Storage file must exist after init()";
     }
 
+    private static <T> void assertNonNull(T value, String message) {
+        assert value != null : message;
+    }
+
     /**
      * Ensures the storage file and parent directories exist.
      *
@@ -56,12 +61,19 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-        for (String line : Files.readAllLines(filePath)) {
-            assert line != null : "Read line must be non-null";
-            tasks.add(Task.fromFileString(line));
-        }
-        assert tasks != null : "Never return null";
-        return tasks;
+
+        return Files.lines(filePath)
+                .peek(line -> {
+                    assert line != null : "Read line must be non-null";
+                })
+                .map(line -> {
+                    try {
+                        return Task.fromFileString(line);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                })
+                .toList();
     }
 
     /**
@@ -72,12 +84,12 @@ public class Storage {
      */
     public void save(List<Task> tasks) throws IOException {
         assert tasks != null : "Null list should not be saved";
-        List<String> lines = new ArrayList<>();
-        for (Task t : tasks) {
-            assert t != null : "Cannot save null task";
-            lines.add(t.toFileString());
-        }
-        Files.write(filePath, lines);
+        Files.write(filePath,
+                tasks.stream()
+                        .peek(t -> assertNonNull(t, "Cannot save null task"))
+                        .map(t -> t.toFileString())
+                        .toList()
+        );
         assert Files.exists(filePath) : "File must exist after write";
     }
 }

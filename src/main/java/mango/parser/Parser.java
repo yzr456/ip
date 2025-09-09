@@ -26,7 +26,7 @@ public class Parser {
     public Parser(String input) {
         assert input != null : "Parser expects non-null raw input";
         this.command = Command.of(input);
-        this.argument = this.command.trimArgument(input);
+        this.argument = this.command.trimKeyword(input);
         assert this.command != null : "Command must not be null";
         assert this.argument != null : "Argument must not be null (empty string is fine)";
     }

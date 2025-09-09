@@ -28,6 +28,11 @@ public class Storage {
     public Storage(String filePath) throws IOException {
         this.filePath = Paths.get(filePath);
         this.init();
+        assert Files.exists(this.filePath) : "Storage file must exist after init()";
+    }
+
+    private static <T> void assertNonNull(T value, String message) {
+        assert value != null : message;
     }
 
     /**
@@ -56,7 +61,11 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
+
         return Files.lines(filePath)
+                .peek(line -> {
+                    assert line != null : "Read line must be non-null";
+                })
                 .map(line -> {
                     try {
                         return Task.fromFileString(line);
@@ -74,10 +83,13 @@ public class Storage {
      * @throws IOException if an error occurs while writing to the file
      */
     public void save(List<Task> tasks) throws IOException {
+        assert tasks != null : "Null list should not be saved";
         Files.write(filePath,
                 tasks.stream()
+                        .peek(t -> assertNonNull(t, "Cannot save null task"))
                         .map(t -> t.toFileString())
                         .toList()
         );
+        assert Files.exists(filePath) : "File must exist after write";
     }
 }

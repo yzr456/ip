@@ -1,5 +1,6 @@
 package mango.parser;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -35,6 +36,7 @@ public enum Command {
      * @return the parsed command, or {@link #UNKNOWN} if none matches
      */
     public static Command of(String input) {
+
         return Stream.of(values())
                 .filter(c -> input.startsWith(c.keyword))
                 .findFirst()
@@ -49,6 +51,9 @@ public enum Command {
      * @return the argument portion of the input, with leading/trailing whitespace removed
      */
     public String trimKeyword(String input) {
+        assert input != null : "trimKeyword expects non-null input";
+        assert input.startsWith(this.keyword)
+                : "Input should start with command keyword (or UNKNOWN)";
         return input.substring(this.keyword.length()).trim();
     }
 }

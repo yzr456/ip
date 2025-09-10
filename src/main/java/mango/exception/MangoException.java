@@ -1,7 +1,7 @@
 package mango.exception;
 
 /**
- * Custom exception class for MangoBot-specific errors.
+ * Exception type for MangoBot-specific validation and parsing errors.
  */
 public class MangoException extends Exception {
     public static final String ERR_INVALID = "Invalid input.";

@@ -52,10 +52,24 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
+    /**
+     * Returns a dialog box styled for the user (image on the right).
+     *
+     * @param text the message text
+     * @param img the user's avatar image
+     * @return the configured {@code DialogBox}
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Returns a dialog box styled for MangoBot (image on the left).
+     *
+     * @param text the bot's message text
+     * @param img the bot's avatar image
+     * @return the configured {@code DialogBox}
+     */
     public static DialogBox getMangoBotDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

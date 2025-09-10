@@ -36,6 +36,12 @@ public class MangoBot {
         this.taskList = new TaskList(this.storage.load());
     }
 
+    /**
+     * Returns MangoBot's reply for a single line of user input.
+     *
+     * @param input the raw user input
+     * @return the formatted reply text
+     */
     public String respond(String input) {
         assert input != null : "respond() expects non-null input";
         Parser p = new Parser(input);
@@ -49,6 +55,9 @@ public class MangoBot {
         }
     }
 
+    /**
+     * Runs the console interface loop until the {@code bye} command is issued.
+     */
     public void run() {
         ui.showWelcome();
         while (true) {
@@ -73,6 +82,14 @@ public class MangoBot {
         }
     }
 
+    /**
+     * Builds the user-visible message for an already-validated {@link Parser}.
+     *
+     * @param p a parser constructed from the raw input
+     * @return a formatted message for the command
+     * @throws MangoException if command-specific validation fails
+     * @throws IOException if saving to storage fails
+     */
     private String getMessage(Parser p) throws MangoException, IOException {
         assert p.getCommand() != null : "Parser must set a non-null command";
         return switch (p.getCommand()) {

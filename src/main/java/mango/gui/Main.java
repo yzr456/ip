@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import mango.core.MangoBot;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for MangoBot using FXML.
  */
 public class Main extends Application {
 

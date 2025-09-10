@@ -10,8 +10,7 @@ import mango.task.Task;
 import mango.task.Todo;
 
 /**
- * The {@code Parser} class is responsible for parsing user input
- * into a {@link Command} and extracting relevant arguments.
+ * Parses user input into a {@link Command} and extracts arguments for that command.
  */
 public class Parser {
     private static final String BY_DELIMITER = " /by ";
@@ -79,26 +78,10 @@ public class Parser {
     }
 
     /**
-     * Parses an index argument (for mark, unmark, delete commands).
-     *
-     * @param listSize the number of tasks in the list
-     * @return the zero-based index
-     * @throws MangoException if the index is missing, non-numeric, or out of range
-     */
-    public int parseIndex(int listSize) throws MangoException {
-        assert listSize >= 0 : "Task list size must be non-negative";
-        int oneBasedIndex = parseOneBasedIndex(this.argument);
-        validateRange(oneBasedIndex, listSize);
-        int zeroBasedIndex = oneBasedIndex - 1;
-        assert zeroBasedIndex >= 0 && zeroBasedIndex < listSize : "Returned index must be within bounds";
-        return zeroBasedIndex;
-    }
-
-    /**
      * Parses multiple indices from the argument string.
      *
      * @param listSize the total number of tasks
-     * @return a list of zero-based indices sorted in descending order
+     * @return a list of zero-based indices
      * @throws MangoException if any index is invalid
      */
     public List<Integer> parseMultipleIndices(int listSize) throws MangoException {

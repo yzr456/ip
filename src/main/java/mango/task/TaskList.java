@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * The {@code TaskList} class represents a collection of tasks.
- * It provides methods to add, remove, view, and update tasks.
+ * It provides methods to add, remove, view, mark/unmark, and find tasks.
  */
 public class TaskList {
     private final List<Task> tasks;
@@ -62,9 +62,9 @@ public class TaskList {
     }
 
     /**
-     * Removes multiple tasks at the specified indices.
+     * Removes tasks at the specified indices.
      *
-     * @param indices list of zero-based indices (must be sorted descending)
+     * @param indices list of zero-based indices
      * @return list of removed tasks
      */
     public List<Task> remove(List<Integer> indices) {
@@ -77,7 +77,7 @@ public class TaskList {
     }
 
     /**
-     * Marks multiple tasks as done.
+     * Marks tasks at the specified indices.
      *
      * @param indices list of zero-based indices
      * @return list of updated tasks
@@ -91,7 +91,7 @@ public class TaskList {
     }
 
     /**
-     * Marks multiple tasks as not done.
+     * Marks tasks at the specified indices.
      *
      * @param indices list of zero-based indices
      * @return list of updated tasks

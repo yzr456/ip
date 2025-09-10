@@ -63,6 +63,12 @@ public abstract class Task {
 
     /**
      * Creates the appropriate {@code Task} based on the type identifier.
+     *
+     * @param type  the one-letter type code
+     * @param desc  the task description
+     * @param parts the split serialized fields
+     * @return a concrete {@code Task} instance
+     * @throws IOException if the type is unknown
      */
     private static Task constructTaskFromType(String type, String desc, String[] parts) throws IOException {
         return switch (type) {
@@ -86,6 +92,11 @@ public abstract class Task {
     /** @return serialized string representation for saving to file. */
     public abstract String toFileString();
 
+    /**
+     * Returns the persistence flag for completion status.
+     *
+     * @return {@code "1"} if done, else {@code "0"}
+     */
     protected String statusFlag() {
         return isDone ? FLAG_DONE : FLAG_NOT_DONE;
     }

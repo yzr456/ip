@@ -6,6 +6,11 @@ package mango.task;
 public class Todo extends Task {
     private static final String TYPE = "T";
 
+    /**
+     * Constructs a {@code Todo} task with the given description.
+     *
+     * @param description the task description
+     */
     public Todo(String description) {
         super(description);
     }

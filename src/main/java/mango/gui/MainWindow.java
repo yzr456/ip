@@ -31,6 +31,9 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
     private Image mangoBotImage = new Image(this.getClass().getResourceAsStream("/images/MangoBot.png"));
 
+    /**
+     * Initializes UI bindings after FXML is loaded.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());

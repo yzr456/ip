@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 public class TaskListTest {
 
     @Test
@@ -13,10 +15,10 @@ public class TaskListTest {
 
         assertTrue(t.toString().contains("[ ][ ]") || t.toString().contains("[T][ ]"));
 
-        list.mark(0);
+        list.mark(List.of(0));
         assertTrue(list.get(0).toString().contains("[T][X]"));
 
-        list.unmark(0);
+        list.unmark(List.of(0));
         assertTrue(list.get(0).toString().contains("[T][ ]"));
     }
 }

@@ -1,6 +1,7 @@
 package mango.core;
 
 import java.io.IOException;
+import java.util.List;
 
 import mango.exception.MangoException;
 import mango.io.Storage;
@@ -78,18 +79,16 @@ public class MangoBot {
             case BYE -> Messages.bye();
             case LIST -> Messages.list(taskList.view());
             case MARK -> {
-                int i = p.parseIndex(taskList.size());
-                assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
-                Task t = taskList.mark(i);
+                List<Integer> indices = p.parseMultipleIndices(taskList.size());
+                List<Task> marked = taskList.mark(indices);
                 storage.save(taskList.view());
-                yield Messages.marked(t);
+                yield Messages.marked(marked);
             }
             case UNMARK -> {
-                int i = p.parseIndex(taskList.size());
-                assert i >= 0 && i < taskList.size() : "parseIndex must return a valid 0-based index";
-                Task t = taskList.unmark(i);
+                List<Integer> indices = p.parseMultipleIndices(taskList.size());
+                List<Task> unmarked = taskList.unmark(indices);
                 storage.save(taskList.view());
-                yield Messages.unmarked(t);
+                yield Messages.unmarked(unmarked);
             }
             case TODO, EVENT, DEADLINE -> {
                 Task t = taskList.add(p.parseArgument());
@@ -98,10 +97,10 @@ public class MangoBot {
                 yield Messages.added(t, taskList.size());
             }
             case DELETE -> {
-                int i = p.parseIndex(taskList.size());
-                Task r = taskList.remove(i);
+                List<Integer> indices = p.parseMultipleIndices(taskList.size());
+                List<Task> removed = taskList.remove(indices);
                 storage.save(taskList.view());
-                yield Messages.removed(r, taskList.size());
+                yield Messages.removed(removed, taskList.size());
             }
             case FIND -> Messages.found(taskList.find(p.getArgument()));
             default -> Messages.invalid();

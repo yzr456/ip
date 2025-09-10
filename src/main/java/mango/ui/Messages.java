@@ -31,17 +31,17 @@ public final class Messages {
                 + t + "\nNow you have " + count + " tasks in the list.";
     }
 
-    public static String removed(Task removed, int count) {
-        return "Noted. I've removed this task:\n   "
-                + removed + "\nNow you have " + count + " tasks in the list.";
+    public static String removed(List<Task> removedTasks, int remainingCount) {
+        return enumerateMassOpTasks("Noted. I've removed these tasks:\n",
+                removedTasks) + "Now you have " + remainingCount + " tasks in the list.";
     }
 
-    public static String marked(Task t) {
-        return "Nice! I've marked this task as done:\n   " + t;
+    public static String marked(List<Task> tasks) {
+        return enumerateMassOpTasks("Nice! I've marked this task as done:\n", tasks);
     }
 
-    public static String unmarked(Task t) {
-        return "OK, I've marked this task as not done yet:\n   " + t;
+    public static String unmarked(List<Task> tasks) {
+        return enumerateMassOpTasks("OK, I've marked this task as not done yet:\n", tasks);
     }
 
     public static String list(List<Task> tasks) {
@@ -50,6 +50,12 @@ public final class Messages {
 
     public static String found(List<Task> tasks) {
         return enumerateTasks("Here are the matching tasks in your list:", "No matching tasks found.", tasks);
+    }
+
+    private static String enumerateMassOpTasks(String header, List<Task> tasks) {
+        return header + tasks.stream()
+                .map(t -> "   " + t + "\n")
+                .reduce("", (acc, line) -> acc + line);
     }
 
     private static String enumerateTasks(String header, String textToShow, List<Task> tasks) {

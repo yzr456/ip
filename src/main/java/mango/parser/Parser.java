@@ -1,5 +1,8 @@
 package mango.parser;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 import mango.exception.MangoException;
 import mango.task.Deadline;
 import mango.task.Event;
@@ -11,7 +14,7 @@ import mango.task.Todo;
  * into a {@link Command} and extracting relevant arguments.
  */
 public class Parser {
-    private static final String BY_DELIMITER   = " /by ";
+    private static final String BY_DELIMITER = " /by ";
     private static final String FROM_DELIMITER = " /from ";
     private static final String TO_DELIMITER = " /to ";
     private static final int FROM_DELIMITER_LENGTH = FROM_DELIMITER.length();
@@ -84,11 +87,42 @@ public class Parser {
      */
     public int parseIndex(int listSize) throws MangoException {
         assert listSize >= 0 : "Task list size must be non-negative";
-        int oneBasedIndex = parseOneBasedIndex();
+        int oneBasedIndex = parseOneBasedIndex(this.argument);
         validateRange(oneBasedIndex, listSize);
         int zeroBasedIndex = oneBasedIndex - 1;
         assert zeroBasedIndex >= 0 && zeroBasedIndex < listSize : "Returned index must be within bounds";
         return zeroBasedIndex;
+    }
+
+    /**
+     * Parses multiple indices from the argument string.
+     *
+     * @param listSize the total number of tasks
+     * @return a list of zero-based indices sorted in descending order
+     * @throws MangoException if any index is invalid
+     */
+    public List<Integer> parseMultipleIndices(int listSize) throws MangoException {
+        assert listSize >= 0 : "Task list size must be non-negative";
+        validateArgumentPresence();
+
+        return Stream.of(argument.split("\\s+"))
+                .map(s -> s.trim())
+                .map(indexStr -> {
+                    try {
+                        return parseOneBasedIndex(indexStr);
+                    } catch (MangoException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .peek(index -> {
+                    try {
+                        validateRange(index, listSize);
+                    } catch (MangoException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(i -> i - 1)
+                .toList();
     }
 
     private void validateArgumentPresence() throws MangoException {
@@ -112,12 +146,14 @@ public class Parser {
         switch (this.command) {
             case DEADLINE -> {
                 if (!this.argument.contains(BY_DELIMITER)) {
-                    throw new MangoException("Deadline must use format: deadline <desc> " + BY_DELIMITER + " <time>");
+                    throw new MangoException("Deadline must use format: deadline <desc> "
+                            + BY_DELIMITER + " <time>");
                 }
             }
             case EVENT -> {
                 if (!this.argument.contains(FROM_DELIMITER) || !this.argument.contains(TO_DELIMITER)) {
-                    throw new MangoException("Event must use format: event <desc> " + FROM_DELIMITER + " <start> " + TO_DELIMITER + " <end>");
+                    throw new MangoException("Event must use format: event <desc> "
+                            + FROM_DELIMITER + " <start> " + TO_DELIMITER + " <end>");
                 }
             }
             default -> { }
@@ -142,7 +178,8 @@ public class Parser {
     private Task parseEvent() {
         int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
         int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
-        assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "Argument must have " + FROM_DELIMITER + " and " + TO_DELIMITER;
+        assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "Argument must have "
+                + FROM_DELIMITER + " and " + TO_DELIMITER;
         String desc = this.argument.substring(0, indexOfFrom).trim();
         String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
         String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
@@ -157,9 +194,9 @@ public class Parser {
         assert !s.isEmpty() : message;
     }
 
-    private int parseOneBasedIndex() throws MangoException {
+    private int parseOneBasedIndex(String argument) throws MangoException {
         try {
-            return Integer.parseInt(this.argument);
+            return Integer.parseInt(argument);
         } catch (NumberFormatException e) {
             throw new MangoException(MangoException.ERR_NAN);
         }

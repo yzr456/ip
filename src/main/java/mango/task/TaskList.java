@@ -1,6 +1,7 @@
 package mango.task;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -61,42 +62,46 @@ public class TaskList {
     }
 
     /**
-     * Removes a task by index.
+     * Removes multiple tasks at the specified indices.
      *
-     * @param index the index of the task to remove
-     * @return the removed task
+     * @param indices list of zero-based indices (must be sorted descending)
+     * @return list of removed tasks
      */
-    public Task remove(int index) {
-        assert index >= 0 && index < tasks.size() : "Index in range";
-        Task r = this.tasks.remove(index);
-        assert r != null : "Removed task should be non-null";
-        return r;
+    public List<Task> remove(List<Integer> indices) {
+        assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
+        return indices.stream()
+                .sorted(Comparator.reverseOrder())
+                .mapToInt(i -> i)
+                .mapToObj(i -> tasks.remove(i))
+                .toList();
     }
 
     /**
-     * Marks a task as done.
+     * Marks multiple tasks as done.
      *
-     * @param index the index of the task
-     * @return the updated task
+     * @param indices list of zero-based indices
+     * @return list of updated tasks
      */
-    public Task mark(int index) {
-        Task t = get(index);
-        t.markAsDone();
-        assert t.isDone : "Task should be marked done";
-        return t;
+    public List<Task> mark(List<Integer> indices) {
+        assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
+        return indices.stream()
+                .map(i -> tasks.get(i))
+                .peek(t -> t.markAsDone())
+                .toList();
     }
 
     /**
-     * Marks a task as not done.
+     * Marks multiple tasks as not done.
      *
-     * @param index the index of the task
-     * @return the updated task
+     * @param indices list of zero-based indices
+     * @return list of updated tasks
      */
-    public Task unmark(int index) {
-        Task t = get(index);
-        t.markAsNotDone();
-        assert !t.isDone : "Task should be marked not done";
-        return t;
+    public List<Task> unmark(List<Integer> indices) {
+        assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
+        return indices.stream()
+                .map(i -> tasks.get(i))
+                .peek(t -> t.markAsNotDone())
+                .toList();
     }
 
     /**

@@ -11,19 +11,20 @@ import java.util.List;
 import mango.task.Task;
 
 /**
- * The {@code Storage} class is responsible for saving and loading tasks
- * from a specified file path. It ensures that the storage file and
- * its parent directories exist.
+ * Persists tasks to disk and restores them from a file.
+ *
+ * <p>Ensures that the storage file and its parent directories exist.</p>
  */
 public class Storage {
     private final Path filePath;
 
     /**
      * Constructs a {@code Storage} object for the given file path.
-     * The file and directories will be created if they do not exist.
      *
-     * @param filePath the path of the storage file
-     * @throws IOException if an error occurs during file initialization
+     * <p>The file and directories are created if they do not exist.</p>
+     *
+     * @param filePath The path of the storage file.
+     * @throws IOException If an error occurs during file initialization.
      */
     public Storage(String filePath) throws IOException {
         this.filePath = Paths.get(filePath);
@@ -34,7 +35,7 @@ public class Storage {
     /**
      * Ensures the storage file and parent directories exist.
      *
-     * @throws IOException if the file or directories cannot be created
+     * @throws IOException If the file or directories cannot be created.
      */
     private void init() throws IOException {
         Path parent = filePath.getParent();
@@ -49,8 +50,8 @@ public class Storage {
     /**
      * Loads tasks from the storage file.
      *
-     * @return a list of {@code Task} objects loaded from the file
-     * @throws IOException if an error occurs while reading the file
+     * @return A list of tasks loaded from the file.
+     * @throws IOException If an error occurs while reading the file.
      */
     public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
@@ -74,8 +75,8 @@ public class Storage {
     /**
      * Saves the given tasks to the storage file.
      *
-     * @param tasks the list of tasks to save
-     * @throws IOException if an error occurs while writing to the file
+     * @param tasks The list of tasks to save.
+     * @throws IOException If an error occurs while writing to the file.
      */
     public void save(List<Task> tasks) throws IOException {
         assert tasks != null : "Null list should not be saved";
@@ -84,7 +85,7 @@ public class Storage {
                         .peek(t -> {
                             assert t != null : "Cannot save null task";
                         })
-                        .map(t -> t.toFileString())
+                        .map(Task::toFileString)
                         .toList()
         );
         assert Files.exists(filePath) : "File must exist after write";

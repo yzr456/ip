@@ -3,7 +3,7 @@ package mango.parser;
 import java.util.stream.Stream;
 
 /**
- * Enum representing all valid commands recognized by {@code MangoBot}.
+ * Enumerates all valid commands recognized by {@code MangoBot}.
  */
 public enum Command {
     BYE("bye"),
@@ -22,17 +22,17 @@ public enum Command {
     /**
      * Constructs a {@code Command} with its associated keyword.
      *
-     * @param keyword the string that identifies this command
+     * @param keyword The string that identifies this command.
      */
     Command(String keyword) {
         this.keyword = keyword;
     }
 
     /**
-     * Parses input to determine which {@code Command} it represents.
+     * Returns the command that matches the start of the input.
      *
-     * @param input the raw user input
-     * @return the parsed command, or {@link #UNKNOWN} if none matches
+     * @param input The raw user input.
+     * @return The parsed command, or {@link #UNKNOWN} if none matches.
      */
     public static Command of(String input) {
         return Stream.of(values())
@@ -42,11 +42,10 @@ public enum Command {
     }
 
     /**
-     * Trims the command keyword from the beginning of the given input,
-     * leaving only the argument portion (if any).
+     * Trims the command keyword from the beginning of the input.
      *
-     * @param input the full input string containing the command and its argument(s)
-     * @return the argument portion of the input, with leading/trailing whitespace removed
+     * @param input The full input string containing the command and its argument(s).
+     * @return The argument portion with leading and trailing whitespace removed.
      */
     public String trimKeyword(String input) {
         assert input != null : "trimKeyword expects non-null input";

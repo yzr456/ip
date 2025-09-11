@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * An {@code Event} task with a start and end date/time.
+ * Task with a start and end date/time.
  */
 public class Event extends Task {
     private static final String TYPE = "E";
@@ -19,9 +19,9 @@ public class Event extends Task {
     /**
      * Constructs an {@code Event}.
      *
-     * @param description description of the event
-     * @param from start time string in format yyyy-MM-dd HHmm
-     * @param to end time string in format yyyy-MM-dd HHmm
+     * @param description Description of the event.
+     * @param from Start time string in format {@code yyyy-MM-dd HHmm}.
+     * @param to End time string in format {@code yyyy-MM-dd HHmm}.
      */
     public Event(String description, String from, String to) {
         super(description);

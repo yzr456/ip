@@ -15,8 +15,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
- * Represents a dialog box consisting of an ImageView to represent the speaker's face
- * and a label containing text from the speaker.
+ * Visual component containing a speaker image and a text bubble.
+ *
+ * <p>Uses FXML to load its structure and styles. Provides factory methods for user
+ * and bot dialog styles.</p>
  */
 public class DialogBox extends HBox {
     @FXML
@@ -43,21 +45,11 @@ public class DialogBox extends HBox {
     }
 
     /**
-     * Flips the dialog box such that the ImageView is on the left and text on the right.
-     */
-    private void flip() {
-        ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
-        Collections.reverse(tmp);
-        getChildren().setAll(tmp);
-        setAlignment(Pos.TOP_LEFT);
-    }
-
-    /**
      * Returns a dialog box styled for the user (image on the right).
      *
-     * @param text the message text
-     * @param img the user's avatar image
-     * @return the configured {@code DialogBox}
+     * @param text The message text.
+     * @param img The user's avatar image.
+     * @return The configured {@code DialogBox}.
      */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
@@ -66,13 +58,21 @@ public class DialogBox extends HBox {
     /**
      * Returns a dialog box styled for MangoBot (image on the left).
      *
-     * @param text the bot's message text
-     * @param img the bot's avatar image
-     * @return the configured {@code DialogBox}
+     * @param text The bot's message text.
+     * @param img The bot's avatar image.
+     * @return The configured {@code DialogBox}.
      */
     public static DialogBox getMangoBotDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
         return db;
+    }
+
+    /** Flips the dialog so the image is on the left and the text on the right. */
+    private void flip() {
+        ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
+        Collections.reverse(tmp);
+        getChildren().setAll(tmp);
+        setAlignment(Pos.TOP_LEFT);
     }
 }

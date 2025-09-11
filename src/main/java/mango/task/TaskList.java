@@ -5,8 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * The {@code TaskList} class represents a collection of tasks.
- * It provides methods to add, remove, view, mark/unmark, and find tasks.
+ * Mutable collection of {@link Task}s with operations to add, remove, update, and query.
  */
 public class TaskList {
     private final List<Task> tasks;
@@ -21,7 +20,7 @@ public class TaskList {
     /**
      * Constructs a {@code TaskList} initialized with existing tasks.
      *
-     * @param initial the initial list of tasks
+     * @param initial The initial list of tasks.
      */
     public TaskList(List<Task> initial) {
         assert initial != null : "Initial list must be non-null";
@@ -31,7 +30,7 @@ public class TaskList {
     /**
      * Returns the number of tasks in the list.
      *
-     * @return the task count
+     * @return The task count.
      */
     public int size() {
         int s = this.tasks.size();
@@ -42,7 +41,7 @@ public class TaskList {
     /**
      * Returns a view of the current task list.
      *
-     * @return the list of tasks
+     * @return The list of tasks.
      */
     public List<Task> view() {
         return this.tasks;
@@ -51,8 +50,8 @@ public class TaskList {
     /**
      * Adds a task to the list.
      *
-     * @param t the task to add
-     * @return the added task
+     * @param t The task to add.
+     * @return The added task.
      */
     public Task add(Task t) {
         assert t != null : "Cannot add null task";
@@ -64,8 +63,8 @@ public class TaskList {
     /**
      * Removes tasks at the specified indices.
      *
-     * @param indices list of zero-based indices
-     * @return list of removed tasks
+     * @param indices List of zero-based indices (may be unsorted).
+     * @return The list of removed tasks.
      */
     public List<Task> remove(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
@@ -77,38 +76,38 @@ public class TaskList {
     }
 
     /**
-     * Marks tasks at the specified indices.
+     * Marks tasks as done at the specified indices.
      *
-     * @param indices list of zero-based indices
-     * @return list of updated tasks
+     * @param indices List of zero-based indices.
+     * @return The list of updated tasks.
      */
     public List<Task> mark(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
         return indices.stream()
                 .map(i -> tasks.get(i))
-                .peek(t -> t.markAsDone())
+                .peek(Task::markAsDone)
                 .toList();
     }
 
     /**
-     * Marks tasks at the specified indices.
+     * Marks tasks as not done at the specified indices.
      *
-     * @param indices list of zero-based indices
-     * @return list of updated tasks
+     * @param indices List of zero-based indices.
+     * @return The list of updated tasks.
      */
     public List<Task> unmark(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
         return indices.stream()
                 .map(i -> tasks.get(i))
-                .peek(t -> t.markAsNotDone())
+                .peek(Task::markAsNotDone)
                 .toList();
     }
 
     /**
-     * Retrieves the task at the specified index from the task list.
+     * Retrieves the task at the specified index.
      *
-     * @param index the zero-based index of the task to retrieve
-     * @return the {@link Task} at the given index
+     * @param index The zero-based index of the task to retrieve.
+     * @return The task at the given index.
      */
     public Task get(int index) {
         Task t = this.tasks.get(index);
@@ -119,8 +118,8 @@ public class TaskList {
     /**
      * Finds tasks whose descriptions contain the given keyword.
      *
-     * @param keyword the search keyword
-     * @return list of matching tasks
+     * @param keyword The search keyword.
+     * @return The list of matching tasks.
      */
     public List<Task> find(String keyword) {
         assert keyword != null : "Keyword must be non-null (empty allowed)";

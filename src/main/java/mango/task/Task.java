@@ -3,8 +3,7 @@ package mango.task;
 import java.io.IOException;
 
 /**
- * Abstract base class representing a task.
- * Each task has a description and a completion status.
+ * Base class representing a task with a description and completion status.
  */
 public abstract class Task {
     protected static final String FILE_SEP = " | ";
@@ -30,10 +29,9 @@ public abstract class Task {
     protected boolean isDone;
 
     /**
-     * Constructs a new {@code Task} with the given description.
-     * By default, the task is marked as not done.
+     * Constructs a new task with the given description.
      *
-     * @param description the description of the task
+     * @param description The description of the task.
      */
     public Task(String description) {
         assert description != null : "Task description must be non-null";
@@ -42,11 +40,11 @@ public abstract class Task {
     }
 
     /**
-     * Deserializes a {@code Task} from a line in storage file.
+     * Deserializes a task from a line in the storage file.
      *
-     * @param line the serialized task string
-     * @return the corresponding {@code Task}
-     * @throws IOException if the type is unknown
+     * @param line The serialized task string.
+     * @return The corresponding {@code Task}.
+     * @throws IOException If the type is unknown.
      */
     public static Task fromFileString(String line) throws IOException {
         String[] parts = line.split(DELIMITER);
@@ -62,13 +60,13 @@ public abstract class Task {
     }
 
     /**
-     * Creates the appropriate {@code Task} based on the type identifier.
+     * Creates the appropriate task based on the type identifier.
      *
-     * @param type  the one-letter type code
-     * @param desc  the task description
-     * @param parts the split serialized fields
-     * @return a concrete {@code Task} instance
-     * @throws IOException if the type is unknown
+     * @param type The one-letter type code.
+     * @param desc The task description.
+     * @param parts The split serialized fields.
+     * @return A concrete {@code Task} instance.
+     * @throws IOException If the type is unknown.
      */
     private static Task constructTaskFromType(String type, String desc, String[] parts) throws IOException {
         return switch (type) {
@@ -79,33 +77,42 @@ public abstract class Task {
         };
     }
 
-    /** Marks this task as done. */
+    /**
+     * Marks this task as done.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
 
-    /** Marks this task as not done. */
+    /**
+     * Marks this task as not done.
+     */
     public void markAsNotDone() {
         this.isDone = false;
     }
 
-    /** @return serialized string representation for saving to file. */
+    /**
+     * Returns the serialized string representation for saving to file.
+     */
     public abstract String toFileString();
 
     /**
      * Returns the persistence flag for completion status.
      *
-     * @return {@code "1"} if done, else {@code "0"}
+     * @return {@code "1"} if done; otherwise {@code "0"}.
      */
     protected String statusFlag() {
         return isDone ? FLAG_DONE : FLAG_NOT_DONE;
     }
 
-    /** @return one-letter task type identifier ("T", "D", or "E"). */
+    /**
+     * Returns the one-letter task type identifier ({@code "T"}, {@code "D"}, or {@code "E"}).
+     */
     protected abstract String getTypeIdentifier();
 
-
-    /** @return "X" if task is done, otherwise a space. */
+    /**
+     * Returns {@code "X"} if the task is done; otherwise a space.
+     */
     private String getStatusMark() {
         return isDone ? STATUS_DONE : STATUS_NOT_DONE;
     }

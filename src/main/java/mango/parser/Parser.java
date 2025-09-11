@@ -10,7 +10,7 @@ import mango.task.Task;
 import mango.task.Todo;
 
 /**
- * Parses user input into a {@link Command} and extracts arguments for that command.
+ * Parses user input into a {@link Command} and extracts arguments.
  */
 public class Parser {
     private static final String BY_DELIMITER = " /by ";
@@ -24,7 +24,7 @@ public class Parser {
     /**
      * Constructs a {@code Parser} from raw user input.
      *
-     * @param input the full command string entered by the user
+     * @param input The full command string entered by the user.
      */
     public Parser(String input) {
         assert input != null : "Parser expects non-null raw input";
@@ -35,27 +35,27 @@ public class Parser {
     }
 
     /**
-     * Returns the parsed {@link Command}.
+     * Returns the parsed command.
      *
-     * @return the command
+     * @return The command.
      */
     public Command getCommand() {
         return this.command;
     }
 
     /**
-     * Returns the argument portion of the user input
+     * Returns the argument portion of the user input.
      *
-     * @return the argument string, possibly empty
+     * @return The argument string, possibly empty.
      */
     public String getArgument() {
         return this.argument;
     }
 
     /**
-     * Validates that the current {@link Command} has a valid argument.
+     * Validates that the current command has a valid argument.
      *
-     * @throws MangoException if the argument is missing or invalid
+     * @throws MangoException If the argument is missing or invalid.
      */
     public void validateArgument() throws MangoException {
         validateArgumentPresence();
@@ -63,10 +63,10 @@ public class Parser {
     }
 
     /**
-     * Parses the current argument into a {@link Task} object based on the {@link Command}.
+     * Parses the current argument into a {@link Task} based on the command.
      *
-     * @return a new {@link Task} instance
-     * @throws MangoException if the command is not a task-creation command or the argument is invalid
+     * @return A new {@link Task}.
+     * @throws MangoException If the command is not a creation command or the argument is invalid.
      */
     public Task parseArgument() throws MangoException {
         return switch (this.command) {
@@ -80,16 +80,16 @@ public class Parser {
     /**
      * Parses multiple indices from the argument string.
      *
-     * @param listSize the total number of tasks
-     * @return a list of zero-based indices
-     * @throws MangoException if any index is invalid
+     * @param listSize The total number of tasks.
+     * @return A list of zero-based indices.
+     * @throws MangoException If any index is invalid.
      */
     public List<Integer> parseMultipleIndices(int listSize) throws MangoException {
         assert listSize >= 0 : "Task list size must be non-negative";
         validateArgumentPresence();
 
         return Stream.of(argument.split("\\s+"))
-                .map(s -> s.trim())
+                .map(String::trim)
                 .map(indexStr -> {
                     try {
                         return parseOneBasedIndex(indexStr);
@@ -130,13 +130,13 @@ public class Parser {
             case DEADLINE -> {
                 if (!this.argument.contains(BY_DELIMITER)) {
                     throw new MangoException("Deadline must use format: deadline <desc> "
-                            + BY_DELIMITER + " <time>");
+                            + BY_DELIMITER + "<time>");
                 }
             }
             case EVENT -> {
                 if (!this.argument.contains(FROM_DELIMITER) || !this.argument.contains(TO_DELIMITER)) {
                     throw new MangoException("Event must use format: event <desc> "
-                            + FROM_DELIMITER + " <start> " + TO_DELIMITER + " <end>");
+                            + FROM_DELIMITER + "<start> " + TO_DELIMITER + "<end>");
                 }
             }
             default -> { }
@@ -167,8 +167,8 @@ public class Parser {
         String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
         String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
         assertNonBlank(desc, "Event description must be non-empty");
-        assertNonBlank(from, "Event  must be non-empty");
-        assertNonBlank(to, "Event description must be non-empty");
+        assertNonBlank(from, "Event start time must be non-empty");
+        assertNonBlank(to, "Event end time must be non-empty");
         return new Event(desc, from, to);
     }
 

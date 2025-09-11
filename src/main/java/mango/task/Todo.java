@@ -1,7 +1,7 @@
 package mango.task;
 
 /**
- * A {@code Todo} is the simplest type of task, without a date or time.
+ * Simplest type of task without a date or time.
  */
 public class Todo extends Task {
     private static final String TYPE = "T";
@@ -9,7 +9,7 @@ public class Todo extends Task {
     /**
      * Constructs a {@code Todo} task with the given description.
      *
-     * @param description the task description
+     * @param description The task description.
      */
     public Todo(String description) {
         super(description);

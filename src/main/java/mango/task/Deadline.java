@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * A {@code Deadline} task that has a specific due date/time.
+ * Task with a specific due date and time.
  */
 public class Deadline extends Task {
     private static final String TYPE = "D";
@@ -18,8 +18,8 @@ public class Deadline extends Task {
     /**
      * Constructs a {@code Deadline} task.
      *
-     * @param description description of the task
-     * @param by date and time string in format yyyy-MM-dd HHmm
+     * @param description Description of the task.
+     * @param by Date and time string in format {@code yyyy-MM-dd HHmm}.
      */
     public Deadline(String description, String by) {
         super(description);

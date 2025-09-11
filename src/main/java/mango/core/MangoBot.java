@@ -13,11 +13,11 @@ import mango.ui.Messages;
 import mango.ui.Ui;
 
 /**
- * The {@code MangoBot} class represents the main entry point of the chatbot application.
- * It manages user interaction, task management, and storage of tasks.
+ * Entry point of the chatbot application.
  *
- * <p>The bot supports commands such as {@code todo}, {@code deadline}, {@code event},
- * {@code list}, {@code mark}, {@code unmark}, {@code delete}, and {@code bye}.
+ * <p>Manages user interaction, task management, and persistent storage. Supports commands
+ * such as {@code todo}, {@code deadline}, {@code event}, {@code list}, {@code mark},
+ * {@code unmark}, {@code delete}, {@code find}, and {@code bye}.</p>
  */
 public class MangoBot {
     private final Storage storage;
@@ -25,10 +25,10 @@ public class MangoBot {
     private final Ui ui;
 
     /**
-     * Constructs a {@code MangoBot} instance with the given file path for storage.
+     * Constructs a {@code MangoBot} with the backing storage file.
      *
-     * @param filePath path to the file where tasks will be saved and loaded
-     * @throws IOException if an error occurs while initializing the storage
+     * @param filePath Path to the file where tasks will be saved and loaded.
+     * @throws IOException If storage initialization fails.
      */
     public MangoBot(String filePath) throws IOException {
         this.ui = new Ui();
@@ -39,8 +39,8 @@ public class MangoBot {
     /**
      * Returns MangoBot's reply for a single line of user input.
      *
-     * @param input the raw user input
-     * @return the formatted reply text
+     * @param input The raw user input.
+     * @return The formatted reply text.
      */
     public String respond(String input) {
         assert input != null : "respond() expects non-null input";
@@ -85,10 +85,10 @@ public class MangoBot {
     /**
      * Builds the user-visible message for an already-validated {@link Parser}.
      *
-     * @param p a parser constructed from the raw input
-     * @return a formatted message for the command
-     * @throws MangoException if command-specific validation fails
-     * @throws IOException if saving to storage fails
+     * @param p The parser constructed from the raw input.
+     * @return A formatted message for the command.
+     * @throws MangoException If command-specific validation fails.
+     * @throws IOException If saving to storage fails.
      */
     private String getMessage(Parser p) throws MangoException, IOException {
         assert p.getCommand() != null : "Parser must set a non-null command";
@@ -127,7 +127,8 @@ public class MangoBot {
     /**
      * Creates and runs a new {@code MangoBot} instance.
      *
-     * @throws IOException if storage initialization fails
+     * @param args Command-line arguments (unused).
+     * @throws IOException If storage initialization fails.
      */
     public static void main(String[] args) throws IOException {
         new MangoBot("./data/mango.txt").run();

@@ -12,20 +12,24 @@ public class Ui {
     /**
      * Prints a wrapped, user-visible message.
      *
-     * @param message the message to show
+     * @param message The message to show.
      */
     public void showMessage(String message) {
         String wrappedMessage = wrap(message);
         System.out.println(wrappedMessage);
     }
 
-    /** Prints the welcome message. */
+    /**
+     * Prints the welcome message.
+     */
     public void showWelcome() {
         String wrappedWelcomeMessage = Messages.welcome();
         System.out.println(wrappedWelcomeMessage);
     }
 
-    /** Prints the farewell message. */
+    /**
+     * Prints the farewell message.
+     */
     public void showBye() {
         String wrappedByeMessage = Messages.bye();
         System.out.println(wrappedByeMessage);
@@ -34,14 +38,16 @@ public class Ui {
     /**
      * Prints an error message.
      *
-     * @param message the error text
+     * @param message The error text.
      */
     public void showError(String message) {
         String wrappedErrorMessage = Messages.error(message);
         System.out.println(wrappedErrorMessage);
     }
 
-    /** Prints a message indicating a storage failure. */
+    /**
+     * Prints a message indicating a storage failure.
+     */
     public void showFailedSave() {
         String wrappedFailedSaveMessage = Messages.failedSave();
         System.out.println(wrappedFailedSaveMessage);
@@ -50,13 +56,15 @@ public class Ui {
     /**
      * Reads one line of user input from {@code System.in}.
      *
-     * @return the raw input line
+     * @return The raw input line.
      */
     public String readCommand() {
         return scanner.nextLine();
     }
 
-    /** Closes the underlying input scanner. */
+    /**
+     * Closes the underlying input scanner.
+     */
     public void close() {
         scanner.close();
     }

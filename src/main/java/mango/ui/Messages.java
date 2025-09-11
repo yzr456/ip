@@ -5,35 +5,45 @@ import java.util.List;
 import mango.task.Task;
 
 /**
- * Static helpers that format strings for MangoBot responses.
+ * Static helpers that format user-visible strings for MangoBot responses.
  */
 public final class Messages {
 
-    /** @return the welcome message. */
+    private Messages() { }
+
+    /**
+     * Returns the welcome message.
+     */
     public static String welcome() {
         return "Hello! I'm MangoBot\n What can I do for you?";
     }
 
-    /** @return the farewell message. */
+    /**
+     * Returns the farewell message.
+     */
     public static String bye() {
         return "Bye. Hope to see you again soon!";
     }
 
-    /** @return the invalid-input message. */
+    /**
+     * Returns the invalid-input message.
+     */
     public static String invalid() {
         return "Invalid input.";
     }
 
-    /** @return the storage-failure message. */
+    /**
+     * Returns the storage-failure message.
+     */
     public static String failedSave() {
         return "Failed to save tasks to disk.";
     }
 
     /**
-     * Returns an error message that simply echoes the provided text.
+     * Returns an error message that echoes the provided text.
      *
-     * @param message the error description
-     * @return the formatted error message
+     * @param message The error description.
+     * @return The formatted error message.
      */
     public static String error(String message) {
         return message;
@@ -42,9 +52,9 @@ public final class Messages {
     /**
      * Returns the confirmation message after adding a task.
      *
-     * @param t the task added
-     * @param count the new total number of tasks
-     * @return the confirmation text
+     * @param t The task added.
+     * @param count The new total number of tasks.
+     * @return The confirmation text.
      */
     public static String added(Task t, int count) {
         return "Got it. I've added this task:\n   "
@@ -54,9 +64,9 @@ public final class Messages {
     /**
      * Returns the confirmation message after removing tasks.
      *
-     * @param removedTasks the tasks removed
-     * @param remainingCount the number of tasks left
-     * @return the confirmation text
+     * @param removedTasks The tasks removed.
+     * @param remainingCount The number of tasks left.
+     * @return The confirmation text.
      */
     public static String removed(List<Task> removedTasks, int remainingCount) {
         return enumerateMassOpTasks("Noted. I've removed these tasks:\n",
@@ -66,28 +76,28 @@ public final class Messages {
     /**
      * Returns the confirmation message after marking tasks done.
      *
-     * @param markedTasks the tasks updated
-     * @return the confirmation text
+     * @param tasks The tasks updated.
+     * @return The confirmation text.
      */
-    public static String marked(List<Task> markedTasks) {
-        return enumerateMassOpTasks("Nice! I've marked this task as done:\n", markedTasks);
+    public static String marked(List<Task> tasks) {
+        return enumerateMassOpTasks("Nice! I've marked this task as done:\n", tasks);
     }
 
     /**
      * Returns the confirmation message after unmarking tasks.
      *
-     * @param unmarkedTasks the tasks updated
-     * @return the confirmation text
+     * @param tasks The tasks updated.
+     * @return The confirmation text.
      */
-    public static String unmarked(List<Task> unmarkedTasks) {
-        return enumerateMassOpTasks("OK, I've marked this task as not done yet:\n", unmarkedTasks);
+    public static String unmarked(List<Task> tasks) {
+        return enumerateMassOpTasks("OK, I've marked this task as not done yet:\n", tasks);
     }
 
     /**
      * Returns a numbered listing of tasks or a message if empty.
      *
-     * @param tasks the tasks to list
-     * @return the formatted list text
+     * @param tasks The tasks to list.
+     * @return The formatted list text.
      */
     public static String list(List<Task> tasks) {
         return enumerateTasks("Here are the tasks in your list:", "No tasks have been added yet.", tasks);
@@ -96,8 +106,8 @@ public final class Messages {
     /**
      * Returns a numbered listing of matching tasks or a message if none match.
      *
-     * @param tasks the matching tasks
-     * @return the formatted list text
+     * @param tasks The matching tasks.
+     * @return The formatted list text.
      */
     public static String found(List<Task> tasks) {
         return enumerateTasks("Here are the matching tasks in your list:", "No matching tasks found.", tasks);

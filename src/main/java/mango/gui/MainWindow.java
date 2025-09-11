@@ -39,7 +39,11 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the MangoBot instance */
+    /**
+     * Injects the {@link MangoBot} instance used by the controller.
+     *
+     * @param mangoBot The bot backing this window.
+     */
     public void setMangoBot(MangoBot mangoBot) {
         assert mangoBot != null : "Injected MangoBot must be non-null";
         this.mangoBot = mangoBot;
@@ -49,8 +53,10 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Handles a user submission: adds the user dialog, computes MangoBot's reply,
+     * adds the bot dialog, and clears the input field.
+     *
+     * <p>If the user types {@code bye}, the window will close shortly after.</p>
      */
     @FXML
     private void handleUserInput() {

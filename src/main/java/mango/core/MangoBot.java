@@ -24,7 +24,7 @@ public class MangoBot {
     private final Storage storage;
     private final TaskList taskList;
     private final Ui ui;
-    private final String startupErrorMessage;
+    private String startupErrorMessage;
 
     /**
      * Constructs a {@code MangoBot} with the backing storage file.
@@ -34,18 +34,17 @@ public class MangoBot {
      */
     public MangoBot(String filePath) throws IOException {
         this.ui = new Ui();
+        ui.showWelcome();
         this.storage = new Storage(filePath);
         List<Task> loadedTasks;
-        String errorMessage = null;
         try {
             loadedTasks = this.storage.load();
         } catch (IOException e) {
-            errorMessage = Messages.failedLoad();
+            this.startupErrorMessage = Messages.failedLoad();
             ui.showFailedLoad();
             loadedTasks = new ArrayList<>();
         }
         this.taskList = new TaskList(loadedTasks);
-        this.startupErrorMessage = errorMessage;
     }
 
     /**

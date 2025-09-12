@@ -139,17 +139,21 @@ public class Parser {
         return new Todo(this.argument);
     }
 
-    private Task parseDeadline() {
+    private Task parseDeadline() throws MangoException {
         String[] parts = this.argument.split(BY_DELIMITER, 2);
         assert parts.length == 2 : "Argument must have " + BY_DELIMITER;
         String desc = parts[0].trim();
         String by = parts[1].trim();
         assertNonBlank(desc, "Deadline description must be non-empty");
         assertNonBlank(by, "Deadline date/time must be non-empty");
-        return new Deadline(desc, by);
+        try {
+            return new Deadline(desc, by);
+        } catch (IllegalArgumentException e) {
+            throw new MangoException(e.getMessage());
+        }
     }
 
-    private Task parseEvent() {
+    private Task parseEvent() throws MangoException {
         int indexOfFrom = this.argument.indexOf(FROM_DELIMITER);
         int indexOfTo = this.argument.indexOf(TO_DELIMITER, indexOfFrom + FROM_DELIMITER_LENGTH);
         assert indexOfFrom >= 0 && indexOfTo > indexOfFrom : "Argument must have "
@@ -160,7 +164,11 @@ public class Parser {
         assertNonBlank(desc, "Event description must be non-empty");
         assertNonBlank(from, "Event start time must be non-empty");
         assertNonBlank(to, "Event end time must be non-empty");
-        return new Event(desc, from, to);
+        try {
+            return new Event(desc, from, to);
+        } catch (IllegalArgumentException e) {
+            throw new MangoException(e.getMessage());
+        }
     }
 
     private void assertNonBlank(String s, String message) {

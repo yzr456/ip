@@ -28,15 +28,24 @@ public final class Messages {
      * Returns the invalid-input message.
      */
     public static String invalid() {
-        return "Whoops! That doesn’t seem like a valid command.";
+        return "Whoops! That doesn’t seem like a valid command.\n"
+                + "Please double-check the command format and parameters, then try again.";
     }
 
     /**
-     * Returns the storage-failure message.
+     * Returns the storage-loading failure message.
+     */
+    public static String failedLoad() {
+        return "Yikes! I couldn’t load your tasks from disk.\n"
+                + "Don’t worry, your data should still be here, but please try again.";
+    }
+
+    /**
+     * Returns the storage-saving failure message.
      */
     public static String failedSave() {
         return "Yikes! I couldn’t save your tasks to disk.\n"
-                + "Don’t worry — your data should still be here, but please try again.";
+                + "Don’t worry, your data should still be here, but please try again.";
     }
 
     /**
@@ -118,8 +127,9 @@ public final class Messages {
 
     private static String enumerateMassOpTasks(String header, List<Task> tasks) {
         return header + tasks.stream()
-                .map(t -> "   " + t + "\n")
-                .reduce("", (acc, line) -> acc + line);
+                .map(t -> "   " + t)
+                .reduce((line1, line2) -> line1 + "\n" + line2)
+                .orElse("");
     }
 
     private static String enumerateTasks(String header, String textToShow, List<Task> tasks) {

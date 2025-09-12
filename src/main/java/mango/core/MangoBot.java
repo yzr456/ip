@@ -1,6 +1,7 @@
 package mango.core;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import mango.exception.MangoException;
@@ -23,6 +24,7 @@ public class MangoBot {
     private final Storage storage;
     private final TaskList taskList;
     private final Ui ui;
+    private final String startupErrorMessage;
 
     /**
      * Constructs a {@code MangoBot} with the backing storage file.
@@ -33,7 +35,17 @@ public class MangoBot {
     public MangoBot(String filePath) throws IOException {
         this.ui = new Ui();
         this.storage = new Storage(filePath);
-        this.taskList = new TaskList(this.storage.load());
+        List<Task> loadedTasks;
+        String errorMessage = null;
+        try {
+            loadedTasks = this.storage.load();
+        } catch (IOException e) {
+            errorMessage = Messages.failedLoad();
+            ui.showFailedLoad();
+            loadedTasks = new ArrayList<>();
+        }
+        this.taskList = new TaskList(loadedTasks);
+        this.startupErrorMessage = errorMessage;
     }
 
     /**
@@ -59,7 +71,6 @@ public class MangoBot {
      * Runs the console interface loop until the {@code bye} command is issued.
      */
     public void run() {
-        ui.showWelcome();
         while (true) {
             String input = ui.readCommand();
             assert input != null : "Console input should not be null";
@@ -80,6 +91,10 @@ public class MangoBot {
                 ui.showFailedSave();
             }
         }
+    }
+
+    public String getStartupErrorMessage() {
+        return this.startupErrorMessage;
     }
 
     /**

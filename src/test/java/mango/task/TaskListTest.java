@@ -6,10 +6,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import mango.exception.MangoException;
+
 public class TaskListTest {
 
     @Test
-    void markAndUnmark_flipStatusButKeepObject() {
+    void markAndUnmark_flipStatusButKeepObject() throws MangoException {
         TaskList list = new TaskList();
         Task t = list.add(new Todo("buy milk"));
 

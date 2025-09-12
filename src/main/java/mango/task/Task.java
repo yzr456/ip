@@ -121,4 +121,16 @@ public abstract class Task {
     public String toString() {
         return "[" + this.getTypeIdentifier() + "][" + this.getStatusMark() + "] " + this.description;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Task other)) {
+            return false;
+        }
+        return this.getTypeIdentifier().equals(other.getTypeIdentifier())
+                && this.description.equalsIgnoreCase(other.description);
+    }
 }

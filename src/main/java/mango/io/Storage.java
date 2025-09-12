@@ -1,7 +1,6 @@
 package mango.io;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,18 +57,12 @@ public class Storage {
         if (!Files.exists(filePath)) {
             return tasks;
         }
-        return Files.lines(filePath)
-                .peek(line -> {
-                    assert line != null : "Read line must be non-null";
-                })
-                .map(line -> {
-                    try {
-                        return Task.fromFileString(line);
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                })
-                .toList();
+        for (String line : Files.readAllLines(filePath)) {
+            assert line != null : "Read line must be non-null";
+            tasks.add(Task.fromFileString(line));
+        }
+        assert tasks != null : "Never return null";
+        return tasks;
     }
 
     /**
@@ -85,7 +78,7 @@ public class Storage {
                         .peek(t -> {
                             assert t != null : "Cannot save null task";
                         })
-                        .map(Task::toFileString)
+                        .map(t -> t.toFileString())
                         .toList()
         );
         assert Files.exists(filePath) : "File must exist after write";

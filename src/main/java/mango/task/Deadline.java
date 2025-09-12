@@ -2,6 +2,9 @@ package mango.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import mango.exception.MangoException;
 
 /**
  * Task with a specific due date and time.
@@ -24,7 +27,11 @@ public class Deadline extends Task {
     public Deadline(String description, String by) {
         super(description);
         assert by != null && !by.isBlank() : "Deadline 'by' must be non-empty";
-        this.by = LocalDateTime.parse(by, INPUT_FMT);
+        try {
+            this.by = LocalDateTime.parse(by, INPUT_FMT);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(MangoException.ERR_BAD_DATE, e);
+        }
     }
 
     @Override

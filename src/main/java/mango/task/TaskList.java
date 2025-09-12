@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import mango.exception.MangoException;
+
 /**
  * Mutable collection of {@link Task}s with operations to add, remove, update, and query.
  */
@@ -53,8 +55,11 @@ public class TaskList {
      * @param t The task to add.
      * @return The added task.
      */
-    public Task add(Task t) {
+    public Task add(Task t) throws MangoException {
         assert t != null : "Cannot add null task";
+        if (this.tasks.contains(t)) {
+            throw new MangoException(MangoException.ERR_DUPLICATE_TASK);
+        }
         this.tasks.add(t);
         assert this.tasks.contains(t) : "Added task must be present";
         return t;

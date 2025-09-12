@@ -2,6 +2,9 @@ package mango.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import mango.exception.MangoException;
 
 /**
  * Task with a start and end date/time.
@@ -26,9 +29,15 @@ public class Event extends Task {
     public Event(String description, String from, String to) {
         super(description);
         assert from != null && to != null : "Event times must be non-null";
-        this.from = LocalDateTime.parse(from, INPUT_FMT);
-        this.to = LocalDateTime.parse(to, INPUT_FMT);
-        assert !this.to.isBefore(this.from) : "Event end time must be >= start time";
+        try {
+            this.from = LocalDateTime.parse(from, INPUT_FMT);
+            this.to = LocalDateTime.parse(to, INPUT_FMT);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(MangoException.ERR_BAD_DATE, e);
+        }
+        if (!this.to.isAfter(this.from)) {
+            throw new IllegalArgumentException(MangoException.ERR_EVENT_RANGE);
+        }
     }
 
     @Override

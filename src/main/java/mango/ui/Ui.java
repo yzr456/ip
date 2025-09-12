@@ -23,7 +23,7 @@ public class Ui {
      * Prints the welcome message.
      */
     public void showWelcome() {
-        String wrappedWelcomeMessage = Messages.welcome();
+        String wrappedWelcomeMessage = wrap(Messages.welcome());
         System.out.println(wrappedWelcomeMessage);
     }
 
@@ -31,7 +31,7 @@ public class Ui {
      * Prints the farewell message.
      */
     public void showBye() {
-        String wrappedByeMessage = Messages.bye();
+        String wrappedByeMessage = wrap(Messages.bye());
         System.out.println(wrappedByeMessage);
     }
 
@@ -41,15 +41,23 @@ public class Ui {
      * @param message The error text.
      */
     public void showError(String message) {
-        String wrappedErrorMessage = Messages.error(message);
+        String wrappedErrorMessage = wrap(Messages.error(message));
         System.out.println(wrappedErrorMessage);
     }
 
     /**
-     * Prints a message indicating a storage failure.
+     * Prints a message indicating a storage-loading failure.
+     */
+    public void showFailedLoad() {
+        String wrappedFailedLoadMessage = wrap(Messages.failedLoad());
+        System.out.println(wrappedFailedLoadMessage);
+    }
+
+    /**
+     * Prints a message indicating a storage-saving failure.
      */
     public void showFailedSave() {
-        String wrappedFailedSaveMessage = Messages.failedSave();
+        String wrappedFailedSaveMessage = wrap(Messages.failedSave());
         System.out.println(wrappedFailedSaveMessage);
     }
 
@@ -70,6 +78,6 @@ public class Ui {
     }
 
     private String wrap(String body) {
-        return LINE + "\n " + body + "\n" + LINE;
+        return LINE + "\n" + body + "\n" + LINE;
     }
 }

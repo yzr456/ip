@@ -15,7 +15,7 @@ public final class Messages {
      * Returns the welcome message.
      */
     public static String welcome() {
-        return "Hello! I'm MangoBot\n What can I do for you?";
+        return "Hello! I'm MangoBot\nWhat can I do for you?";
     }
 
     /**

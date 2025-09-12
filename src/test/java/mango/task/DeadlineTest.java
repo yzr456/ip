@@ -30,11 +30,19 @@ public class DeadlineTest {
     void toString_validDeadline_hasDescriptionBySectionAndFormattedDate() {
         Deadline d = new Deadline("return book", "2019-12-02 1800");
         String result = d.toString();
-        assertTrue(result.contains("return book"), "Description should appear in toString");
-        assertTrue(result.contains("(by:"), "Output should contain '(by: ... )' section");
-        assertTrue(result.contains("Dec 02 2019, 6:00pm"),
-                "Date should match format 'MMM dd yyyy, h:mma'");
+
+        assertTrue(result.contains("return book"));
+        assertTrue(result.contains("(by:"));
+
+        var expected = java.time.LocalDateTime.parse(
+                "2019-12-02 1800", java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))
+                .format(java.time.format.DateTimeFormatter.ofPattern(
+                        "MMM dd yyyy, h:mma", java.util.Locale.getDefault()));
+        assertTrue(
+                result.contains(expected), ()
+                        -> "Date should match 'MMM dd yyyy, h:mma' in locale " + java.util.Locale.getDefault());
     }
+
 
     @Test
     void constructor_invalidDateString_throwsIllegalArgumentException() {

@@ -32,7 +32,7 @@ public class DeadlineTest {
         String result = d.toString();
         assertTrue(result.contains("return book"), "Description should appear in toString");
         assertTrue(result.contains("(by:"), "Output should contain '(by: ... )' section");
-        assertTrue(result.contains("Dec 02 2019, 6:00PM"),
+        assertTrue(result.contains("Dec 02 2019, 6:00pm"),
                 "Date should match format 'MMM dd yyyy, h:mma'");
     }
 

@@ -79,7 +79,7 @@ public final class Messages {
      */
     public static String removed(List<Task> removedTasks, int remainingCount) {
         return enumerateMassOpTasks("Poof! I’ve removed these tasks:\n", removedTasks)
-                + "You’re now down to " + remainingCount + " task" + (remainingCount == 1 ? "" : "s") + ".";
+                + "\nYou’re now down to " + remainingCount + " task" + (remainingCount == 1 ? "" : "s") + ".";
     }
 
     /**

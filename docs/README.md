@@ -1,8 +1,8 @@
 # MangoBot — User Guide
 
-> Your task-taming sidekick for quick todos, deadlines, and events.
+> Your task-managing sidekick.
 
-![MangoBot](./docs/Ui.png "MangoBot")  
+![MangoBot](./Ui.png "MangoBot")  
 
 ---
 
@@ -26,7 +26,7 @@
 
 ## What is MangoBot?
 
-MangoBot is a small Java/JavaFX task manager that runs in a clean chat-style UI or in the console. It supports simple tasks, due-dated deadlines, and timed events. Tasks are saved locally to a text file so they persist across sessions.
+MangoBot is a small task manager that runs in a chat-style UI or in the console. It supports simple tasks, due-dated deadlines and events. Tasks are saved locally to a text file so they persist across sessions.
 
 ---
 

@@ -13,7 +13,7 @@ public final class Messages {
      * Returns the welcome message.
      */
     public static String welcome() {
-        return "Hey there! I’m MangoBot, your task-taming sidekick.\nWhat can I help you do today?";
+        return "Hey there! I’m MangoBot, your task-managing sidekick.\nWhat can I help you do today?";
     }
 
     /**

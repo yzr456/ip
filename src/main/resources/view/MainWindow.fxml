@@ -19,6 +19,7 @@
     <children>
         <TextField fx:id="userInput"
                    layoutY="558.0"
+                   promptText="Type a command… e.g., todo read book"
                    onAction="#handleUserInput"
                    AnchorPane.bottomAnchor="0.0"
                    AnchorPane.leftAnchor="0.0"

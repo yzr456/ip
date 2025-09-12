@@ -1,7 +1,7 @@
 package mango.parser;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import mango.exception.MangoException;
 import mango.task.Deadline;
@@ -88,24 +88,15 @@ public class Parser {
         assert listSize >= 0 : "Task list size must be non-negative";
         validateArgumentPresence();
 
-        return Stream.of(argument.split("\\s+"))
-                .map(String::trim)
-                .map(indexStr -> {
-                    try {
-                        return parseOneBasedIndex(indexStr);
-                    } catch (MangoException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .peek(index -> {
-                    try {
-                        validateRange(index, listSize);
-                    } catch (MangoException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .map(i -> i - 1)
-                .toList();
+        String[] indices = argument.split("\\s+");
+        List<Integer> indicesList = new ArrayList<>(indices.length);
+
+        for (String index : indices) {
+            int oneBased = parseOneBasedIndex(index);
+            validateRange(oneBased, listSize);
+            indicesList.add(oneBased - 1);
+        }
+        return indicesList;
     }
 
     private void validateArgumentPresence() throws MangoException {

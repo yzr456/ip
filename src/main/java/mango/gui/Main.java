@@ -22,6 +22,7 @@ public class Main extends Application {
             AnchorPane ap = fxmlLoader.load();
             assert ap != null : "FXML must load";
             Scene scene = new Scene(ap);
+            scene.getStylesheets().add(Main.class.getResource("/view/theme.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("MangoBot");
 

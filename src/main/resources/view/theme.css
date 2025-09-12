@@ -1,0 +1,93 @@
+.root {
+  -mango-bg:           linear-gradient(to bottom, #fffdf6, #fff6db);
+  -mango-panel:        #ffffff;
+  -mango-border:       #e9e2cf;
+
+  -mango-primary:      #ffb300;  /* mango orange */
+  -mango-primary-700:  #d99000;
+  -mango-accent:       #2eb872;  /* leafy green */
+
+  -bubble-user:        #e8f7ed;  /* soft green */
+  -bubble-bot:         #fff3cf;  /* soft mango */
+
+  -shadow-1:           dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0.2, 0, 2);
+  -shadow-2:           dropshadow(gaussian, rgba(0,0,0,0.18), 16, 0.2, 0, 4);
+
+  -fx-font-smoothing-type: gray;
+  -fx-background-color: -mango-bg;
+}
+
+@font-face {
+  font-family: "Nunito";
+  src: url("fonts/Nunito-Regular.ttf");
+}
+@font-face {
+  font-family: "Nunito";
+  src: url("fonts/Nunito-Bold.ttf");
+  font-weight: bold;
+}
+
+.root, .label, .text-field, .button {
+  -fx-font-family: "Nunito";
+  -fx-text-fill: -text-strong;
+  -fx-font-size: 13px;
+}
+
+.dialog-row {
+  -fx-spacing: 10;
+  -fx-padding: 8 10 8 10;
+}
+
+.scroll-pane, .scroll-pane .viewport, .vbox {
+  -fx-background-color: transparent;
+}
+
+.text-field {
+  -fx-background-color: -mango-panel;
+  -fx-background-radius: 12;
+  -fx-border-color: -mango-border;
+  -fx-border-radius: 12;
+  -fx-padding: 8 12 8 12;
+  -fx-prompt-text-fill: -text-subtle;
+}
+.text-field:focused {
+  -fx-border-color: -mango-primary;
+  -fx-effect: -shadow-1;
+}
+
+.button {
+  -fx-background-color: -mango-primary;
+  -fx-text-fill: white;
+  -fx-background-radius: 12;
+  -fx-padding: 8 14 8 14;
+  -fx-cursor: hand;
+  -fx-effect: -shadow-1;
+}
+.button:hover {
+  -fx-background-color: -mango-primary-700;
+}
+.button:pressed {
+  -fx-translate-y: 1;
+}
+
+.bubble {
+  -fx-background-radius: 16;
+  -fx-padding: 10 12 10 12;
+  -fx-wrap-text: true;
+  -fx-effect: -shadow-1;
+  -fx-border-radius: 16;
+  -fx-border-color: transparent;
+}
+
+.bubble-user {
+  -fx-background-color: -bubble-user;
+  -fx-border-color: #cfe9da;
+}
+.bubble-bot {
+  -fx-background-color: -bubble-bot;
+  -fx-border-color: #f0e0b0;
+}
+
+.anchor-pane {
+  -fx-padding: 8;
+}

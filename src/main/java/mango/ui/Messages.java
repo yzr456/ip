@@ -15,28 +15,30 @@ public final class Messages {
      * Returns the welcome message.
      */
     public static String welcome() {
-        return "Hello! I'm MangoBot\nWhat can I do for you?";
+        return "Hey there! I’m MangoBot, your task-taming sidekick.\nWhat can I help you do today?";
     }
 
     /**
      * Returns the farewell message.
      */
     public static String bye() {
-        return "Bye. Hope to see you again soon!";
+        return "MangoBot signing off — your tasks are safely stored!\n" +
+                "May your day be as smooth as a ripe mango. See you soon!";
     }
 
     /**
      * Returns the invalid-input message.
      */
     public static String invalid() {
-        return "Invalid input.";
+        return "Whoops! That doesn’t seem like a valid command.";
     }
 
     /**
      * Returns the storage-failure message.
      */
     public static String failedSave() {
-        return "Failed to save tasks to disk.";
+        return "Yikes! I couldn’t save your tasks to disk.\n" +
+                "Don’t worry — your data should still be here, but please try again.";
     }
 
     /**
@@ -46,7 +48,7 @@ public final class Messages {
      * @return The formatted error message.
      */
     public static String error(String message) {
-        return message;
+        return "Error: " + message;
     }
 
     /**
@@ -57,7 +59,7 @@ public final class Messages {
      * @return The confirmation text.
      */
     public static String added(Task t, int count) {
-        return "Got it. I've added this task:\n   "
+        return "Sweet! I’ve added this to your task basket:\n   "
                 + t + "\nNow you have " + count + " tasks in the list.";
     }
 
@@ -69,8 +71,8 @@ public final class Messages {
      * @return The confirmation text.
      */
     public static String removed(List<Task> removedTasks, int remainingCount) {
-        return enumerateMassOpTasks("Noted. I've removed these tasks:\n",
-                removedTasks) + "Now you have " + remainingCount + " tasks in the list.";
+        return enumerateMassOpTasks("Poof! I’ve removed these tasks:\n", removedTasks) +
+                "You’re now down to " + remainingCount + " task" + (remainingCount == 1 ? "" : "s") + ".";
     }
 
     /**
@@ -80,7 +82,7 @@ public final class Messages {
      * @return The confirmation text.
      */
     public static String marked(List<Task> tasks) {
-        return enumerateMassOpTasks("Nice! I've marked this task as done:\n", tasks);
+        return enumerateMassOpTasks("Done and dusted! I’ve marked these as complete:\n", tasks);
     }
 
     /**
@@ -90,7 +92,7 @@ public final class Messages {
      * @return The confirmation text.
      */
     public static String unmarked(List<Task> tasks) {
-        return enumerateMassOpTasks("OK, I've marked this task as not done yet:\n", tasks);
+        return enumerateMassOpTasks("Back to the grind — I’ve marked these as not done yet:\n", tasks);
     }
 
     /**
@@ -100,7 +102,8 @@ public final class Messages {
      * @return The formatted list text.
      */
     public static String list(List<Task> tasks) {
-        return enumerateTasks("Here are the tasks in your list:", "No tasks have been added yet.", tasks);
+        return enumerateTasks("Here’s what’s on your plate today:",
+                "Your task basket is empty — time to add some fresh mangoes!", tasks);
     }
 
     /**
@@ -110,7 +113,9 @@ public final class Messages {
      * @return The formatted list text.
      */
     public static String found(List<Task> tasks) {
-        return enumerateTasks("Here are the matching tasks in your list:", "No matching tasks found.", tasks);
+        return enumerateTasks(
+                "Here are the tasks I found that match your search:",
+                "Hmm... no matching tasks here. Try a different keyword!", tasks);
     }
 
     private static String enumerateMassOpTasks(String header, List<Task> tasks) {

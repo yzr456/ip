@@ -18,7 +18,8 @@
         <Label fx:id="dialog"
                minHeight="-Infinity"
                text="Label"
-               wrapText="true" />
+               wrapText="true"
+               styleClass="bubble" />
 
         <ImageView fx:id="displayPicture"
                    fitHeight="99.0"

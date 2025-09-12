@@ -9,8 +9,6 @@ import mango.task.Task;
  */
 public final class Messages {
 
-    private Messages() { }
-
     /**
      * Returns the welcome message.
      */
@@ -22,8 +20,8 @@ public final class Messages {
      * Returns the farewell message.
      */
     public static String bye() {
-        return "MangoBot signing off — your tasks are safely stored!\n" +
-                "May your day be as smooth as a ripe mango. See you soon!";
+        return "MangoBot signing off — your tasks are safely stored!\n"
+                + "May your day be as smooth as a ripe mango. See you soon!";
     }
 
     /**
@@ -37,8 +35,8 @@ public final class Messages {
      * Returns the storage-failure message.
      */
     public static String failedSave() {
-        return "Yikes! I couldn’t save your tasks to disk.\n" +
-                "Don’t worry — your data should still be here, but please try again.";
+        return "Yikes! I couldn’t save your tasks to disk.\n"
+                + "Don’t worry — your data should still be here, but please try again.";
     }
 
     /**
@@ -71,8 +69,8 @@ public final class Messages {
      * @return The confirmation text.
      */
     public static String removed(List<Task> removedTasks, int remainingCount) {
-        return enumerateMassOpTasks("Poof! I’ve removed these tasks:\n", removedTasks) +
-                "You’re now down to " + remainingCount + " task" + (remainingCount == 1 ? "" : "s") + ".";
+        return enumerateMassOpTasks("Poof! I’ve removed these tasks:\n", removedTasks)
+                + "You’re now down to " + remainingCount + " task" + (remainingCount == 1 ? "" : "s") + ".";
     }
 
     /**

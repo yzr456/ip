@@ -10,6 +10,10 @@
   -bubble-user:        #e8f7ed;  /* soft green */
   -bubble-bot:         #fff3cf;  /* soft mango */
 
+  -text-strong:        #1c1c1c;
+  -text-subtle:        #5a5a5a;
+  -text-danger:        #3a0b0b;
+
   -shadow-1:           dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0.2, 0, 2);
   -shadow-2:           dropshadow(gaussian, rgba(0,0,0,0.18), 16, 0.2, 0, 4);
 

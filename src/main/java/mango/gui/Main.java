@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import mango.core.MangoBot;
@@ -25,6 +26,7 @@ public class Main extends Application {
             scene.getStylesheets().add(Main.class.getResource("/view/theme.css").toExternalForm());
             stage.setScene(scene);
             stage.setTitle("MangoBot");
+            stage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/MangoBot.png")));
 
             MangoBot mangoBot = new MangoBot("./data/mango.txt");
             assert mangoBot != null : "MangoBot must be created";

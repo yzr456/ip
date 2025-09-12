@@ -20,11 +20,15 @@ public class Event extends Task {
     private final LocalDateTime to;
 
     /**
-     * Constructs an {@code Event}.
+     * Creates an {@code Event}.
      *
-     * @param description Description of the event.
-     * @param from Start time string in format {@code yyyy-MM-dd HHmm}.
-     * @param to End time string in format {@code yyyy-MM-dd HHmm}.
+     * @param description event description
+     * @param from start date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 0900})
+     * @param to end date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 1100})
+     * @throws IllegalArgumentException if either time cannot be parsed; message is
+     *         {@link MangoException#ERR_BAD_DATE} and cause is a {@link DateTimeParseException}
+     * @throws IllegalArgumentException if {@code to} is not strictly after {@code from};
+     *         message is {@link MangoException#ERR_EVENT_RANGE}
      */
     public Event(String description, String from, String to) {
         super(description);

@@ -88,15 +88,26 @@ public class Parser {
         assert listSize >= 0 : "Task list size must be non-negative";
         validateArgumentPresence();
 
-        String[] indices = argument.split("\\s+");
-        List<Integer> indicesList = new ArrayList<>(indices.length);
+        String[] oneBasedIndices = this.argument.split("\\s+");
+        return toZeroBasedIndices(oneBasedIndices, listSize);
+    }
 
+    /**
+     * Converts whitespace-separated 1-based indices into zero-based indices and validates range.
+     *
+     * @param indices the string tokens parsed from {@link #argument}
+     * @param listSize the current number of tasks for range checking
+     * @return a list of zero-based indices
+     * @throws MangoException if any index is not numeric or out of range
+     */
+    private List<Integer> toZeroBasedIndices(String[] indices, int listSize) throws MangoException {
+        List<Integer> zeroBasedIndices = new ArrayList<>(indices.length);
         for (String index : indices) {
-            int oneBased = parseOneBasedIndex(index);
-            validateRange(oneBased, listSize);
-            indicesList.add(oneBased - 1);
+            int oneBasedIndex = parseOneBasedIndex(index);
+            validateRange(oneBasedIndex, listSize);
+            zeroBasedIndices.add(oneBasedIndex - 1);
         }
-        return indicesList;
+        return zeroBasedIndices;
     }
 
     private void validateArgumentPresence() throws MangoException {
@@ -118,19 +129,22 @@ public class Parser {
 
     private void validateArgumentFormat() throws MangoException {
         switch (this.command) {
-            case DEADLINE -> {
-                if (!this.argument.contains(BY_DELIMITER)) {
-                    throw new MangoException("Deadline must use format: deadline <desc> "
-                            + BY_DELIMITER + "<time>");
-                }
-            }
-            case EVENT -> {
-                if (!this.argument.contains(FROM_DELIMITER) || !this.argument.contains(TO_DELIMITER)) {
-                    throw new MangoException("Event must use format: event <desc> "
-                            + FROM_DELIMITER + "<start> " + TO_DELIMITER + "<end>");
-                }
-            }
+            case DEADLINE -> handleDeadlineFormat();
+            case EVENT -> handleEventFormat();
             default -> { }
+        }
+    }
+
+    private void handleDeadlineFormat() throws MangoException {
+        if (!this.argument.contains(BY_DELIMITER)) {
+            throw new MangoException("Deadline must use format: deadline <desc> " + BY_DELIMITER + "<time>");
+        }
+    }
+
+    private void handleEventFormat() throws MangoException {
+        if (!this.argument.contains(FROM_DELIMITER) || !this.argument.contains(TO_DELIMITER)) {
+            throw new MangoException("Event must use format: event <desc> "
+                    + FROM_DELIMITER + "<start> " + TO_DELIMITER + "<end>");
         }
     }
 
@@ -144,13 +158,11 @@ public class Parser {
         assert parts.length == 2 : "Argument must have " + BY_DELIMITER;
         String desc = parts[0].trim();
         String by = parts[1].trim();
+
         assertNonBlank(desc, "Deadline description must be non-empty");
         assertNonBlank(by, "Deadline date/time must be non-empty");
-        try {
-            return new Deadline(desc, by);
-        } catch (IllegalArgumentException e) {
-            throw new MangoException(e.getMessage());
-        }
+
+        return constructDeadline(desc, by);
     }
 
     private Task parseEvent() throws MangoException {
@@ -161,21 +173,32 @@ public class Parser {
         String desc = this.argument.substring(0, indexOfFrom).trim();
         String from = this.argument.substring(indexOfFrom + FROM_DELIMITER_LENGTH, indexOfTo).trim();
         String to = this.argument.substring(indexOfTo + TO_DELIMITER_LENGTH).trim();
+
         assertNonBlank(desc, "Event description must be non-empty");
         assertNonBlank(from, "Event start time must be non-empty");
         assertNonBlank(to, "Event end time must be non-empty");
-        try {
-            return new Event(desc, from, to);
-        } catch (IllegalArgumentException e) {
-            throw new MangoException(e.getMessage());
-        }
+
+        return constructEvent(desc, from, to);
     }
 
+    /**
+     * Asserts the string is non-null and non-empty (assertions only).
+     *
+     * @param s value to check
+     * @param message assertion message
+     */
     private void assertNonBlank(String s, String message) {
         assert s != null;
         assert !s.isEmpty() : message;
     }
 
+    /**
+     * Parses a single 1-based index token into an {@code int}.
+     *
+     * @param argument the token to parse
+     * @return the parsed 1-based index
+     * @throws MangoException if the token is not a valid integer
+     */
     private int parseOneBasedIndex(String argument) throws MangoException {
         try {
             return Integer.parseInt(argument);
@@ -184,6 +207,29 @@ public class Parser {
         }
     }
 
+    private Task constructDeadline(String desc, String by) throws MangoException {
+        try {
+            return new Deadline(desc, by);
+        } catch (IllegalArgumentException e) {
+            throw new MangoException(e.getMessage());
+        }
+    }
+
+    private Task constructEvent(String desc, String from, String to) throws MangoException {
+        try {
+            return new Event(desc, from, to);
+        } catch (IllegalArgumentException e) {
+            throw new MangoException(e.getMessage());
+        }
+    }
+
+    /**
+     * Validates that a 1-based index lies within {@code 1..listSize}.
+     *
+     * @param oneBasedIndex index to validate
+     * @param listSize upper bound (inclusive)
+     * @throws MangoException if out of range (command-specific message where applicable)
+     */
     private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
         assert oneBasedIndex != 0 : "A zero index would be invalid for 1-based input";
         if (oneBasedIndex <= 0 || oneBasedIndex > listSize) {

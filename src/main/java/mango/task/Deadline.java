@@ -19,10 +19,12 @@ public class Deadline extends Task {
     private final LocalDateTime by;
 
     /**
-     * Constructs a {@code Deadline} task.
+     * Creates a {@code Deadline}.
      *
-     * @param description Description of the task.
-     * @param by Date and time string in format {@code yyyy-MM-dd HHmm}.
+     * @param description task description
+     * @param by due date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 1800})
+     * @throws IllegalArgumentException if {@code by} cannot be parsed; the message is
+     *         {@link MangoException#ERR_BAD_DATE} and the cause is a {@link DateTimeParseException}
      */
     public Deadline(String description, String by) {
         super(description);

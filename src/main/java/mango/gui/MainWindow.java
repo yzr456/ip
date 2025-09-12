@@ -50,6 +50,7 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().add(
                 DialogBox.getMangoBotDialog(Messages.welcome(), mangoBotImage)
         );
+
         if (mangoBot.getStartupErrorMessage() != null) {
             dialogContainer.getChildren().add(
                     DialogBox.getMangoBotDialog(mangoBot.getStartupErrorMessage(), mangoBotImage)

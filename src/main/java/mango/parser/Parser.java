@@ -24,7 +24,7 @@ public class Parser {
     /**
      * Constructs a {@code Parser} from raw user input.
      *
-     * @param input The full command string entered by the user.
+     * @param input the raw user input.
      */
     public Parser(String input) {
         assert input != null : "Parser expects non-null raw input";
@@ -37,7 +37,7 @@ public class Parser {
     /**
      * Returns the parsed command.
      *
-     * @return The command.
+     * @return the command.
      */
     public Command getCommand() {
         return this.command;
@@ -46,7 +46,7 @@ public class Parser {
     /**
      * Returns the argument portion of the user input.
      *
-     * @return The argument string, possibly empty.
+     * @return the argument string, possibly empty.
      */
     public String getArgument() {
         return this.argument;
@@ -55,7 +55,7 @@ public class Parser {
     /**
      * Validates that the current command has a valid argument.
      *
-     * @throws MangoException If the argument is missing or invalid.
+     * @throws MangoException if the argument is missing or invalid.
      */
     public void validateArgument() throws MangoException {
         validateArgumentPresence();
@@ -65,8 +65,8 @@ public class Parser {
     /**
      * Parses the current argument into a {@link Task} based on the command.
      *
-     * @return A new {@link Task}.
-     * @throws MangoException If the command is not a creation command or the argument is invalid.
+     * @return a new {@link Task}.
+     * @throws MangoException if the command is not a task creation command or the argument is invalid.
      */
     public Task parseArgument() throws MangoException {
         return switch (this.command) {
@@ -80,9 +80,9 @@ public class Parser {
     /**
      * Parses multiple indices from the argument string.
      *
-     * @param listSize The total number of tasks.
-     * @return A list of zero-based indices.
-     * @throws MangoException If any index is invalid.
+     * @param listSize the total number of tasks.
+     * @return a list of zero-based indices.
+     * @throws MangoException if any index is invalid.
      */
     public List<Integer> parseMultipleIndices(int listSize) throws MangoException {
         assert listSize >= 0 : "Task list size must be non-negative";
@@ -95,15 +95,15 @@ public class Parser {
     /**
      * Converts whitespace-separated 1-based indices into zero-based indices and validates range.
      *
-     * @param indices the string tokens parsed from {@link #argument}
-     * @param listSize the current number of tasks for range checking
-     * @return a list of zero-based indices
-     * @throws MangoException if any index is not numeric or out of range
+     * @param tokens the string tokens parsed from {@link #argument}.
+     * @param listSize the current number of tasks for range checking.
+     * @return a list of zero-based indices.
+     * @throws MangoException if any index is not numeric or out of range.
      */
-    private List<Integer> toZeroBasedIndices(String[] indices, int listSize) throws MangoException {
-        List<Integer> zeroBasedIndices = new ArrayList<>(indices.length);
-        for (String index : indices) {
-            int oneBasedIndex = parseOneBasedIndex(index);
+    private List<Integer> toZeroBasedIndices(String[] tokens, int listSize) throws MangoException {
+        List<Integer> zeroBasedIndices = new ArrayList<>(tokens.length);
+        for (String token : tokens) {
+            int oneBasedIndex = parseOneBasedIndex(token);
             validateRange(oneBasedIndex, listSize);
             zeroBasedIndices.add(oneBasedIndex - 1);
         }
@@ -182,10 +182,10 @@ public class Parser {
     }
 
     /**
-     * Asserts the string is non-null and non-empty (assertions only).
+     * Asserts the string is non-null and non-empty.
      *
-     * @param s value to check
-     * @param message assertion message
+     * @param s the value to check.
+     * @param message assertion message.
      */
     private void assertNonBlank(String s, String message) {
         assert s != null;
@@ -195,9 +195,9 @@ public class Parser {
     /**
      * Parses a single 1-based index token into an {@code int}.
      *
-     * @param argument the token to parse
-     * @return the parsed 1-based index
-     * @throws MangoException if the token is not a valid integer
+     * @param argument the token to parse.
+     * @return the parsed 1-based index.
+     * @throws MangoException if the token is not a valid integer.
      */
     private int parseOneBasedIndex(String argument) throws MangoException {
         try {
@@ -226,9 +226,9 @@ public class Parser {
     /**
      * Validates that a 1-based index lies within {@code 1..listSize}.
      *
-     * @param oneBasedIndex index to validate
-     * @param listSize upper bound (inclusive)
-     * @throws MangoException if out of range (command-specific message where applicable)
+     * @param oneBasedIndex the index to validate.
+     * @param listSize the upper bound (inclusive).
+     * @throws MangoException if out of range (command-specific message where applicable).
      */
     private void validateRange(int oneBasedIndex, int listSize) throws MangoException {
         assert oneBasedIndex != 0 : "A zero index would be invalid for 1-based input";

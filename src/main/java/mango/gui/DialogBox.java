@@ -47,9 +47,9 @@ public class DialogBox extends HBox {
     /**
      * Returns a dialog box styled for the user (image on the right).
      *
-     * @param text The message text.
-     * @param img The user's avatar image.
-     * @return The configured {@code DialogBox}.
+     * @param text the message text.
+     * @param img the user's avatar image.
+     * @return the configured {@code DialogBox}.
      */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
@@ -58,9 +58,9 @@ public class DialogBox extends HBox {
     /**
      * Returns a dialog box styled for MangoBot (image on the left).
      *
-     * @param text The bot's message text.
-     * @param img The bot's avatar image.
-     * @return The configured {@code DialogBox}.
+     * @param text the bot's message text.
+     * @param img the bot's avatar image.
+     * @return the configured {@code DialogBox}.
      */
     public static DialogBox getMangoBotDialog(String text, Image img) {
         var db = new DialogBox(text, img);
@@ -68,7 +68,9 @@ public class DialogBox extends HBox {
         return db;
     }
 
-    /** Flips the dialog so the image is on the left and the text on the right. */
+    /**
+     * Flips the dialog so the image is on the left and the text on the right.
+     */
     private void flip() {
         ObservableList<Node> tmp = FXCollections.observableArrayList(this.getChildren());
         Collections.reverse(tmp);

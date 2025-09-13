@@ -22,8 +22,8 @@ public class Storage {
      *
      * <p>The file and directories are created if they do not exist.</p>
      *
-     * @param filePath The path of the storage file.
-     * @throws IOException If an error occurs during file initialization.
+     * @param filePath the path of the storage file.
+     * @throws IOException if an error occurs during file initialization.
      */
     public Storage(String filePath) throws IOException {
         this.filePath = Paths.get(filePath);
@@ -34,7 +34,7 @@ public class Storage {
     /**
      * Ensures the storage file and parent directories exist.
      *
-     * @throws IOException If the file or directories cannot be created.
+     * @throws IOException if the file or directories cannot be created.
      */
     private void init() throws IOException {
         Path parent = filePath.getParent();
@@ -49,8 +49,8 @@ public class Storage {
     /**
      * Loads tasks from the storage file.
      *
-     * @return A list of tasks loaded from the file.
-     * @throws IOException If an error occurs while reading the file.
+     * @return a list of tasks loaded from the file.
+     * @throws IOException if an error occurs while reading the file.
      */
     public List<Task> load() throws IOException {
         List<Task> tasks = new ArrayList<>();
@@ -68,8 +68,8 @@ public class Storage {
     /**
      * Saves the given tasks to the storage file.
      *
-     * @param tasks The list of tasks to save.
-     * @throws IOException If an error occurs while writing to the file.
+     * @param tasks the list of tasks to save.
+     * @throws IOException if an error occurs while writing to the file.
      */
     public void save(List<Task> tasks) throws IOException {
         assert tasks != null : "Null list should not be saved";

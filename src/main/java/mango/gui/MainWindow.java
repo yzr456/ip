@@ -42,7 +42,7 @@ public class MainWindow extends AnchorPane {
     /**
      * Injects the {@link MangoBot} instance used by the controller.
      *
-     * @param mangoBot The bot backing this window.
+     * @param mangoBot the bot backing this window.
      */
     public void setMangoBot(MangoBot mangoBot) {
         assert mangoBot != null : "Injected MangoBot must be non-null";
@@ -59,10 +59,11 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Handles a user submission: adds the user dialog, computes MangoBot's reply,
-     * adds the bot dialog, and clears the input field.
+     * Processes the current input submission.
      *
-     * <p>If the user types {@code bye}, the window will close shortly after.</p>
+     * <p>Adds the user's message and MangoBot's reply to the dialog container, then clears
+     * the input field. If the input is {@code "bye"} (case-insensitive), disables the
+     * input controls and quits the application after a short delay.</p>
      */
     @FXML
     private void handleUserInput() {

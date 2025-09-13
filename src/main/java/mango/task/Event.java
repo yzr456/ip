@@ -22,13 +22,11 @@ public class Event extends Task {
     /**
      * Creates an {@code Event}.
      *
-     * @param description event description
-     * @param from start date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 0900})
-     * @param to end date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 1100})
-     * @throws IllegalArgumentException if either time cannot be parsed; message is
-     *         {@link MangoException#ERR_BAD_DATE} and cause is a {@link DateTimeParseException}
-     * @throws IllegalArgumentException if {@code to} is not strictly after {@code from};
-     *         message is {@link MangoException#ERR_EVENT_RANGE}
+     * @param description the event description.
+     * @param from the start date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 0900}).
+     * @param to the end date/time in {@code yyyy-MM-dd HHmm} (e.g., {@code 2025-12-31 1100}).
+     * @throws IllegalArgumentException
+     *         if either time cannot be parsed or if {@code to} is not strictly after {@code from}.
      */
     public Event(String description, String from, String to) {
         super(description);

@@ -22,7 +22,7 @@ public class Ui {
     /**
      * Reads one line of user input from {@code System.in}.
      *
-     * @return The raw input line.
+     * @return the raw input line.
      */
     public String readCommand() {
         return scanner.nextLine();

@@ -7,7 +7,11 @@ import java.util.List;
 import mango.exception.MangoException;
 
 /**
- * Mutable collection of {@link Task}s with operations to add, remove, update, and query.
+ * Mutable collection of {@link Task}s with basic list operations.
+ *
+ * <p>Supports adding (rejects duplicates), removing, marking/unmarking,
+ * searching by substring, and size/view queries. All index-based operations use
+ * zero-based indices.</p>
  */
 public class TaskList {
     private final List<Task> tasks;
@@ -22,7 +26,7 @@ public class TaskList {
     /**
      * Constructs a {@code TaskList} initialized with existing tasks.
      *
-     * @param initial The initial list of tasks.
+     * @param initial the initial list of tasks.
      */
     public TaskList(List<Task> initial) {
         assert initial != null : "Initial list must be non-null";
@@ -32,7 +36,7 @@ public class TaskList {
     /**
      * Returns the number of tasks in the list.
      *
-     * @return The task count.
+     * @return the task count.
      */
     public int size() {
         int s = this.tasks.size();
@@ -43,7 +47,7 @@ public class TaskList {
     /**
      * Returns a view of the current task list.
      *
-     * @return The list of tasks.
+     * @return the list of tasks.
      */
     public List<Task> view() {
         return this.tasks;
@@ -52,8 +56,8 @@ public class TaskList {
     /**
      * Adds a task to the list.
      *
-     * @param t The task to add.
-     * @return The added task.
+     * @param t the task to add.
+     * @return the added task.
      */
     public Task add(Task t) throws MangoException {
         assert t != null : "Cannot add null task";
@@ -68,8 +72,8 @@ public class TaskList {
     /**
      * Removes tasks at the specified indices.
      *
-     * @param indices List of zero-based indices (may be unsorted).
-     * @return The list of removed tasks.
+     * @param indices the list of zero-based indices.
+     * @return the list of removed tasks.
      */
     public List<Task> remove(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
@@ -83,8 +87,8 @@ public class TaskList {
     /**
      * Marks tasks as done at the specified indices.
      *
-     * @param indices List of zero-based indices.
-     * @return The list of updated tasks.
+     * @param indices the list of zero-based indices.
+     * @return the list of updated tasks.
      */
     public List<Task> mark(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
@@ -97,8 +101,8 @@ public class TaskList {
     /**
      * Marks tasks as not done at the specified indices.
      *
-     * @param indices List of zero-based indices.
-     * @return The list of updated tasks.
+     * @param indices the list of zero-based indices.
+     * @return the list of updated tasks.
      */
     public List<Task> unmark(List<Integer> indices) {
         assert indices != null && !indices.isEmpty() : "Indices must not be null or empty";
@@ -111,8 +115,8 @@ public class TaskList {
     /**
      * Retrieves the task at the specified index.
      *
-     * @param index The zero-based index of the task to retrieve.
-     * @return The task at the given index.
+     * @param index the zero-based index of the task to retrieve.
+     * @return the task at the given index.
      */
     public Task get(int index) {
         Task t = this.tasks.get(index);
@@ -123,8 +127,8 @@ public class TaskList {
     /**
      * Finds tasks whose descriptions contain the given keyword.
      *
-     * @param keyword The search keyword.
-     * @return The list of matching tasks.
+     * @param keyword the search keyword.
+     * @return the list of matching tasks.
      */
     public List<Task> find(String keyword) {
         assert keyword != null : "Keyword must be non-null (empty allowed)";

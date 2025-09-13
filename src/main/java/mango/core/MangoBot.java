@@ -33,8 +33,8 @@ public class MangoBot {
     /**
      * Constructs a {@code MangoBot} with the backing storage file.
      *
-     * @param filePath Path to the file where tasks will be saved and loaded.
-     * @throws IOException If storage initialization fails.
+     * @param filePath the path to the file where tasks will be saved and loaded.
+     * @throws IOException if storage initialization fails.
      */
     public MangoBot(String filePath) throws IOException {
         this.ui = new Ui();
@@ -54,8 +54,8 @@ public class MangoBot {
     /**
      * Returns MangoBot's reply for a single line of user input.
      *
-     * @param input The raw user input.
-     * @return The formatted reply text.
+     * @param input the raw user input.
+     * @return the formatted reply text.
      */
     public String respond(String input) {
         assert input != null : "respond() expects non-null input";
@@ -89,48 +89,45 @@ public class MangoBot {
     /**
      * Returns the startup error message if tasks failed to load during construction.
      *
-     * @return the startup error message, or {@code null} if no load error occurred
+     * @return the startup error message, or {@code null} if no load error occurred.
      */
     public String getStartupErrorMessage() {
         return this.startupErrorMessage;
     }
 
     /**
-     * Parses, validates, and dispatches a single input into a reply.
+     * Produces a reply for one line of input.
      *
-     * @param input the raw user input
-     * @return the formatted reply text
-     * @throws MangoException if command-specific validation fails
-     * @throws IOException if saving to storage fails in the dispatched handler
+     * @param input the raw user input.
+     * @return the formatted reply text.
+     * @throws MangoException if the input fails command/argument validation.
+     * @throws IOException if saving to storage fails in the dispatched handler.
      */
     private String buildReplyForInput(String input) throws MangoException, IOException {
         Parser p = new Parser(input);
         p.validateArgument();
-        return getMessage(p);
+        return getReply(p);
     }
 
     /**
      * Returns {@code true} if the input corresponds to the {@code bye} command.
      *
-     * @param input the raw user input
-     * @return whether the command is {@code bye}
+     * @param input the raw user input.
+     * @return whether the command is {@code bye}.
      */
     private boolean commandIsBye(String input) {
         return new Parser(input).getCommand() == Command.BYE;
     }
 
     /**
-     * Builds the user-visible message for an already-validated {@link Parser}.
+     * Produces a reply for a validated parser by dispatching to the matching command handler.
      *
-     * <p>Dispatches to command handlers and, where applicable, persists changes
-     * before formatting the response.</p>
-     *
-     * @param p the parser constructed from the raw input (already validated)
-     * @return a formatted message for the command
-     * @throws MangoException if command-specific validation fails
-     * @throws IOException if saving to storage fails
+     * @param p the parser constructed from the raw input (already validated).
+     * @return the formatted reply text.
+     * @throws MangoException if a handler rejects the arguments.
+     * @throws IOException if saving to storage fails.
      */
-    private String getMessage(Parser p) throws MangoException, IOException {
+    private String getReply(Parser p) throws MangoException, IOException {
         assert p.getCommand() != null : "Parser must set a non-null command";
         return switch (p.getCommand()) {
             case BYE -> Messages.bye();
@@ -182,8 +179,7 @@ public class MangoBot {
     /**
      * Creates and runs a new {@code MangoBot} instance.
      *
-     * @param args Command-line arguments (unused).
-     * @throws IOException If storage initialization fails.
+     * @throws IOException if storage initialization fails.
      */
     public static void main(String[] args) throws IOException {
         new MangoBot("./data/mango.txt").run();

@@ -43,7 +43,6 @@ public class DeadlineTest {
                         -> "Date should match 'MMM dd yyyy, h:mma' in locale " + java.util.Locale.getDefault());
     }
 
-
     @Test
     void constructor_invalidDateString_throwsIllegalArgumentException() {
         assertThrows(

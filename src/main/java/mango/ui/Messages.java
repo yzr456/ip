@@ -51,8 +51,8 @@ public final class Messages {
     /**
      * Returns an error message that echoes the provided text.
      *
-     * @param message The error description.
-     * @return The formatted error message.
+     * @param message the error description.
+     * @return the formatted error message.
      */
     public static String error(String message) {
         return "Error: " + message;
@@ -61,9 +61,9 @@ public final class Messages {
     /**
      * Returns the confirmation message after adding a task.
      *
-     * @param t The task added.
-     * @param count The new total number of tasks.
-     * @return The confirmation text.
+     * @param t the task added.
+     * @param count the new total number of tasks.
+     * @return the confirmation text.
      */
     public static String added(Task t, int count) {
         return "Sweet! I’ve added this to your task basket:\n   "
@@ -73,9 +73,9 @@ public final class Messages {
     /**
      * Returns the confirmation message after removing tasks.
      *
-     * @param removedTasks The tasks removed.
-     * @param remainingCount The number of tasks left.
-     * @return The confirmation text.
+     * @param removedTasks the tasks removed.
+     * @param remainingCount the number of tasks remaining.
+     * @return the confirmation text.
      */
     public static String removed(List<Task> removedTasks, int remainingCount) {
         return enumerateMassOpTasks("Poof! I’ve removed these tasks:\n", removedTasks)
@@ -85,8 +85,8 @@ public final class Messages {
     /**
      * Returns the confirmation message after marking tasks done.
      *
-     * @param tasks The tasks updated.
-     * @return The confirmation text.
+     * @param tasks the tasks updated.
+     * @return the confirmation text.
      */
     public static String marked(List<Task> tasks) {
         return enumerateMassOpTasks("Done and dusted! I’ve marked these as complete:\n", tasks);
@@ -95,8 +95,8 @@ public final class Messages {
     /**
      * Returns the confirmation message after unmarking tasks.
      *
-     * @param tasks The tasks updated.
-     * @return The confirmation text.
+     * @param tasks the tasks updated.
+     * @return the confirmation text.
      */
     public static String unmarked(List<Task> tasks) {
         return enumerateMassOpTasks("Back to the grind — I’ve marked these as not done yet:\n", tasks);
@@ -105,8 +105,8 @@ public final class Messages {
     /**
      * Returns a numbered listing of tasks or a message if empty.
      *
-     * @param tasks The tasks to list.
-     * @return The formatted list text.
+     * @param tasks the tasks to list.
+     * @return the formatted list text.
      */
     public static String list(List<Task> tasks) {
         return enumerateTasks("Here’s what’s on your plate today:",
@@ -116,8 +116,8 @@ public final class Messages {
     /**
      * Returns a numbered listing of matching tasks or a message if none match.
      *
-     * @param tasks The matching tasks.
-     * @return The formatted list text.
+     * @param tasks the matching tasks.
+     * @return the formatted list text.
      */
     public static String found(List<Task> tasks) {
         return enumerateTasks(
